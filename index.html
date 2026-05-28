@@ -489,7 +489,6 @@ footer {
 .nav-contact-btn { display: flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 9px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: var(--muted); font-size: 18px; text-decoration: none; transition: all 0.2s; }
 .nav-contact-btn:hover { background: rgba(41,182,246,0.15); border-color: #29b6f6; color: #29b6f6; }
 .nav-contact-btn--wa:hover { background: rgba(37,211,102,0.15); border-color: #25d366; color: #25d366; }
-@media (max-width: 960px) { .nav-contacts { right: 20px; } }
 
 /* UTILS */
 .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.7s, transform 0.7s; }
@@ -563,7 +562,7 @@ footer {
 .ai-cta-bar { margin-top: 40px; padding: 24px 32px; background: rgba(200,241,53,0.06); border: 1px solid rgba(200,241,53,0.2); border-radius: 12px; display: flex; align-items: center; justify-content: space-between; gap: 32px; flex-wrap: wrap; }
 
 /* BURGER MENU */
-.burger-btn { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 6px; position: absolute; right: 16px; }
+.burger-btn { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 6px; position: absolute; right: 16px; z-index: 102; }
 .burger-btn span { display: block; width: 22px; height: 2px; background: var(--text); border-radius: 2px; transition: all 0.3s; }
 .burger-btn.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
 .burger-btn.open span:nth-child(2) { opacity: 0; }
@@ -819,8 +818,7 @@ nav {
       <span class="accent">ПРОЦЕССОМ!</span>
     </h1>
     <p class="hero-sub">Два инструмента — кто работает и что строится. Всё под контролем, без Excel и мессенджеров.</p>
-    <div class="hero-trust-badge"><div class="hero-trust-badge-dot"></div>Основано на опыте 23 проектов и 1 400+ смен в день</div>
-    <div class="hero-cta">
+<div class="hero-cta">
       <button class="btn-primary" onclick="openModal()"><i class="ti ti-calendar"></i> Записаться на демо</button>
       <a href="#pricing" class="btn-secondary"><i class="ti ti-tag"></i> Посмотреть цены</a>
     </div>
