@@ -654,11 +654,26 @@ footer {
   --lime: #c8f135;
   --lime-dim: #a8d020;
   --bg: #0a0a0a;
-  --bg2: #111111;
-  --bg3: #1a1a1a;
-  --border: rgba(255,255,255,0.06);
+  --bg2: #141414;
+  --bg3: #1e1e1e;
+  --border: rgba(255,255,255,0.08);
   --text: #f0f0f0;
   --muted: #7a8fa6;
+}
+
+/* Section separators */
+section:not(.hero) {
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+.pain-section, #reviews, #pricing, #ai, #faq {
+  position: relative;
+}
+.pain-section::before, #reviews::before, #pricing::before, #ai::before, #faq::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 5%; right: 5%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(200,241,53,0.2), transparent);
 }
 nav {
   background: rgba(10,10,10,0.92);
@@ -779,19 +794,19 @@ nav {
     <div class="modal-title">Записаться на демо</div>
     <div class="modal-sub">Покажем систему на твоих данных. Займёт 20 минут.</div>
     <div class="form-group">
-      <label class="form-label">Имя</label>
-      <input class="form-input" type="text" placeholder="Александр">
+      <label class="form-label">Имя <span style="color:var(--lime)">*</span></label>
+      <input class="form-input" type="text" placeholder="Andreas" id="fieldName">
     </div>
     <div class="form-group">
-      <label class="form-label">Телефон или Email</label>
-      <input class="form-input" type="text" placeholder="+7 900 000 00 00 или email@company.com">
+      <label class="form-label">Телефон <span style="color:var(--lime)">*</span></label>
+      <input class="form-input" type="tel" placeholder="+357 96 123 456" id="fieldPhone">
     </div>
     <div class="form-group">
-      <label class="form-label">Название компании</label>
-      <input class="form-input" type="text" placeholder="Строй Групп">
+      <label class="form-label">Компания <span style="color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0">(необязательно)</span></label>
+      <input class="form-input" type="text" placeholder="ABC Construction Ltd" id="fieldCompany">
     </div>
     <button class="form-submit" onclick="submitForm()">Отправить заявку</button>
-    <div class="form-note">Перезвоним в течение 2 часов в рабочее время</div>
+    <div class="form-note">Свяжемся в течение 2 часов · <span style="color:var(--lime)">*</span> обязательные поля</div>
   </div>
 </div>
 
@@ -1260,7 +1275,7 @@ nav {
       <div class="price-main" id="price-start">€99/мес</div>
       <div class="price-sub" id="psub-start"></div>
       <div class="price-highlights" id="hl-start"></div>
-      <button class="price-btn">Начать</button>
+      <button class="price-btn" onclick="openModal()">Начать</button>
     </div>
 
     <div class="price-card price-card-featured reveal">
@@ -1270,7 +1285,7 @@ nav {
       <div class="price-main" id="price-growth">€199/мес</div>
       <div class="price-sub" id="psub-growth"></div>
       <div class="price-highlights" id="hl-growth"></div>
-      <button class="price-btn price-btn-featured">Выбрать план</button>
+      <button class="price-btn price-btn-featured" onclick="openModal()">Выбрать план</button>
     </div>
 
     <div class="price-card reveal">
@@ -1279,7 +1294,7 @@ nav {
       <div class="price-main" id="price-pro">€349/мес</div>
       <div class="price-sub" id="psub-pro"></div>
       <div class="price-highlights" id="hl-pro"></div>
-      <button class="price-btn">Обсудить</button>
+      <button class="price-btn" onclick="openModal()">Обсудить</button>
     </div>
   </div>
 
@@ -1745,11 +1760,11 @@ function closeModal() {
   document.body.style.overflow = '';
 }
 async function submitForm() {
-  const inputs = document.querySelectorAll('#demoModal .form-input');
-  const name = inputs[0].value.trim();
-  const contact = inputs[1].value.trim();
-  const company = inputs[2].value.trim();
-  if (!name || !contact) { alert('Пожалуйста, заполните имя и контакт.'); return; }
+  const name = document.getElementById('fieldName').value.trim();
+  const contact = document.getElementById('fieldPhone').value.trim();
+  const company = document.getElementById('fieldCompany').value.trim();
+  if (!name) { document.getElementById('fieldName').focus(); alert('Пожалуйста, введите имя.'); return; }
+  if (!contact) { document.getElementById('fieldPhone').focus(); alert('Пожалуйста, введите телефон.'); return; }
   const btn = document.querySelector('#demoModal .form-submit');
   btn.textContent = 'Отправляем...';
   btn.disabled = true;
