@@ -741,6 +741,11 @@ nav {
 .form-submit { width: 100%; padding: 14px; background: var(--lime); color: #0a0a0a; border: none; border-radius: 8px; font-family: var(--font-body); font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 8px; transition: opacity 0.2s; }
 .form-submit:hover { opacity: 0.9; }
 .form-note { font-size: 11px; color: var(--muted); margin-top: 12px; text-align: center; }
+.form-consent-label { display: flex; gap: 10px; align-items: flex-start; cursor: pointer; font-size: 13px; color: var(--text); line-height: 1.5; }
+.form-consent-label.error { color: #ff6b6b; }
+.form-consent-link { color: var(--lime); text-decoration: underline; text-underline-offset: 3px; }
+.form-consent-link:hover { color: var(--lime-dim); }
+.form-consent-text { font-size: 11px; color: var(--muted); line-height: 1.6; margin-top: 8px; padding: 10px 14px; background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 8px; }
 
 /* TESTIMONIALS */
 .testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 48px; }
@@ -804,6 +809,15 @@ nav {
     <div class="form-group">
       <label class="form-label">Компания <span style="color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0">(необязательно)</span></label>
       <input class="form-input" type="text" placeholder="ABC Construction Ltd" id="fieldCompany">
+    </div>
+    <div class="form-group" style="margin-top:4px">
+      <label class="form-consent-label" id="consentLabel">
+        <input type="checkbox" id="fieldConsent" style="accent-color:var(--lime);width:16px;height:16px;flex-shrink:0;margin-top:2px;cursor:pointer">
+        <span>Я согласен(а) на <a href="#privacy-policy" onclick="openPrivacy();return false" class="form-consent-link">обработку персональных данных</a></span>
+      </label>
+      <div class="form-consent-text">
+        Отправляя форму, вы соглашаетесь на обработку ваших персональных данных в соответствии с законодательством Кипра и GDPR. Ваши данные будут использованы исключительно администрацией данного сервиса и только для предоставления услуг, описанных на этом сайте. Мы гарантируем полную конфиденциальность: ваши данные никогда и ни при каких условиях не будут переданы третьим лицам. Вы можете отозвать согласие в любой момент.
+      </div>
     </div>
     <button class="form-submit" onclick="submitForm()">Отправить заявку</button>
     <div class="form-note">Свяжемся в течение 2 часов · <span style="color:var(--lime)">*</span> обязательные поля</div>
@@ -1758,6 +1772,11 @@ function openModal() {
 function closeModal() {
   document.getElementById('demoModal').classList.remove('open');
   document.body.style.overflow = '';
+  const consent = document.getElementById('fieldConsent');
+  if (consent) consent.checked = false;
+}
+function openPrivacy() {
+  alert('Политика конфиденциальности\n\nОтправляя форму, вы соглашаетесь на обработку ваших персональных данных в соответствии с законодательством Кипра и GDPR.\n\nВаши данные будут использованы исключительно администрацией данного сервиса и только для предоставления услуг, описанных на этом сайте.\n\nМы гарантируем полную конфиденциальность: ваши данные никогда и ни при каких условиях не будут переданы третьим лицам.\n\nВы можете отозвать согласие в любой момент, написав нам в Telegram или WhatsApp.');
 }
 async function submitForm() {
   const name = document.getElementById('fieldName').value.trim();
@@ -1765,6 +1784,14 @@ async function submitForm() {
   const company = document.getElementById('fieldCompany').value.trim();
   if (!name) { document.getElementById('fieldName').focus(); alert('Пожалуйста, введите имя.'); return; }
   if (!contact) { document.getElementById('fieldPhone').focus(); alert('Пожалуйста, введите телефон.'); return; }
+  const consent = document.getElementById('fieldConsent');
+  if (!consent.checked) {
+    const lbl = document.getElementById('consentLabel');
+    lbl.classList.add('error');
+    lbl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    setTimeout(() => lbl.classList.remove('error'), 2500);
+    return;
+  }
   const btn = document.querySelector('#demoModal .form-submit');
   btn.textContent = 'Отправляем...';
   btn.disabled = true;
