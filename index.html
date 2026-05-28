@@ -560,6 +560,13 @@ footer {
 .ai-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; margin-top: 48px; }
 .ai-examples-list { display: flex; flex-direction: column; gap: 12px; }
 .ai-cta-bar { margin-top: 40px; padding: 24px 32px; background: rgba(200,241,53,0.06); border: 1px solid rgba(200,241,53,0.2); border-radius: 12px; display: flex; align-items: center; justify-content: space-between; gap: 32px; flex-wrap: wrap; }
+.ai-examples-wrap { position: relative; }
+.ai-scroll-hint { display: none; align-items: center; justify-content: center; gap: 8px; margin-top: 12px; }
+.ai-scroll-hint span { font-size: 12px; color: var(--muted); }
+.ai-dots { display: flex; gap: 6px; align-items: center; }
+.ai-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--border); transition: background 0.2s, width 0.2s; cursor: pointer; }
+.ai-dot.active { background: var(--lime); width: 18px; border-radius: 3px; }
+.ai-examples-fade { display: none; position: absolute; right: 0; top: 0; bottom: 0; width: 40px; background: linear-gradient(to right, transparent, var(--bg2)); pointer-events: none; border-radius: 0 12px 12px 0; }
 
 /* BURGER MENU */
 .burger-btn { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 6px; position: absolute; right: 16px; z-index: 102; }
@@ -623,13 +630,20 @@ footer {
   .ai-cta-bar { flex-direction: column; align-items: stretch; padding: 20px; gap: 16px; }
   .ai-cta-bar a { text-align: center; }
 
-  /* Pricing mobile */
+  /* Pricing mobile — vertical stack */
   .pricing-controls { gap: 14px; margin: 24px 0; }
   .pricing-toggle-group { width: 100%; }
   .ptog { padding: 8px 12px; font-size: 12px; flex: 1; justify-content: center; }
-  .price-card { padding: 22px 18px; }
+  .pricing-cards { display: flex; flex-direction: column; overflow-x: unset; scroll-snap-type: unset; gap: 16px; padding-bottom: 0; }
+  .price-card { flex: unset; width: 100%; scroll-snap-align: unset; padding: 22px 18px; }
   .price-plan { font-size: 22px; }
   .price-main { font-size: 28px; }
+
+  /* AI examples — dots indicator */
+  .ai-examples-wrap { position: relative; }
+  .ai-examples-fade { display: block; }
+  .ai-scroll-hint { display: flex; }
+  .ai-dot { cursor: pointer; }
 }
 
 /* ── CLEAN DARK THEME ───────────────────────── */
@@ -1365,7 +1379,9 @@ nav {
 
     <div class="reveal">
       <div style="font-size:12px;color:var(--lime);font-weight:700;text-transform:uppercase;letter-spacing:2px;margin-bottom:16px">Примеры запросов</div>
-      <div class="ai-examples-list">
+      <div class="ai-examples-wrap">
+      <div class="ai-examples-fade"></div>
+      <div class="ai-examples-list" id="aiExamplesList">
         <div style="background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:16px 20px">
           <div style="font-size:12px;color:var(--muted);margin-bottom:6px">Time Management</div>
           <div style="font-size:14px;font-weight:600">"Кто из рабочих не вышел сегодня на объект Никосия?"</div>
@@ -1382,6 +1398,18 @@ nav {
           <div style="font-size:12px;color:var(--muted);margin-bottom:6px">Construction Management</div>
           <div style="font-size:14px;font-weight:600">"Сравни бюджет и факт по всем объектам за май"</div>
         </div>
+      </div>
+      <div class="ai-examples-fade"></div>
+      </div><!-- /ai-examples-wrap -->
+      <div class="ai-scroll-hint">
+        <span>←</span>
+        <div class="ai-dots" id="aiDots">
+          <div class="ai-dot active" onclick="scrollAiTo(0)"></div>
+          <div class="ai-dot" onclick="scrollAiTo(1)"></div>
+          <div class="ai-dot" onclick="scrollAiTo(2)"></div>
+          <div class="ai-dot" onclick="scrollAiTo(3)"></div>
+        </div>
+        <span>→</span>
       </div>
     </div>
 
@@ -1753,6 +1781,31 @@ function closeBurger() {
   document.getElementById('burgerBtn').classList.remove('open');
   document.getElementById('mobileMenu').classList.remove('open');
 }
+
+/* AI EXAMPLES DOTS */
+(function() {
+  function initAiDots() {
+    const list = document.getElementById('aiExamplesList');
+    const dots = document.querySelectorAll('#aiDots .ai-dot');
+    if (!list || !dots.length) return;
+    function updateDots() {
+      const cards = list.children;
+      if (!cards.length) return;
+      const cardW = cards[0].offsetWidth + 12;
+      const idx = Math.round(list.scrollLeft / cardW);
+      dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+    }
+    list.addEventListener('scroll', updateDots, { passive: true });
+    window.scrollAiTo = function(idx) {
+      const cards = list.children;
+      if (!cards.length) return;
+      const cardW = cards[0].offsetWidth + 12;
+      list.scrollTo({ left: idx * cardW, behavior: 'smooth' });
+    };
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initAiDots);
+  else initAiDots();
+})();
 
 /* HERO CARD SWIPE */
 (function() {
