@@ -557,22 +557,59 @@ footer {
 
 /* hero-right sized above */
 
+/* BURGER MENU */
+.burger-btn { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 6px; position: absolute; right: 16px; }
+.burger-btn span { display: block; width: 22px; height: 2px; background: var(--text); border-radius: 2px; transition: all 0.3s; }
+.burger-btn.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.burger-btn.open span:nth-child(2) { opacity: 0; }
+.burger-btn.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+.mobile-menu { display: none; position: fixed; top: 57px; left: 0; right: 0; background: rgba(10,10,10,0.98); border-bottom: 1px solid var(--border); backdrop-filter: blur(14px); z-index: 99; padding: 8px 24px 20px; flex-direction: column; }
+.mobile-menu.open { display: flex; }
+.mobile-menu a { color: var(--muted); text-decoration: none; font-size: 15px; font-weight: 600; padding: 14px 0; border-bottom: 1px solid var(--border); letter-spacing: 0.3px; transition: color 0.2s; }
+.mobile-menu a:last-child { border-bottom: none; color: var(--lime); }
+.mobile-menu a:hover { color: var(--lime); }
+
+/* FIXED BOTTOM BAR */
+.bottom-bar { display: none; position: fixed; bottom: 0; left: 0; right: 0; z-index: 200; background: rgba(10,10,10,0.97); border-top: 1px solid var(--border); backdrop-filter: blur(14px); padding: 10px 16px; padding-bottom: calc(10px + env(safe-area-inset-bottom)); }
+.bottom-bar-inner { display: flex; gap: 8px; }
+.bottom-bar-btn { flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px; padding: 12px 8px; border-radius: 10px; font-family: var(--font-body); font-size: 13px; font-weight: 700; text-decoration: none; border: 1px solid transparent; cursor: pointer; transition: opacity 0.2s; white-space: nowrap; }
+.bottom-bar-btn--demo { background: var(--lime); color: #0a0a0a; border-color: var(--lime); }
+.bottom-bar-btn--tg { background: rgba(41,182,246,0.12); border-color: rgba(41,182,246,0.4); color: #29b6f6; }
+.bottom-bar-btn--wa { background: rgba(37,211,102,0.12); border-color: rgba(37,211,102,0.4); color: #25d366; }
+.bottom-bar-btn:hover { opacity: 0.85; }
+
+/* TRUST BADGE */
+.hero-trust-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 100px; padding: 5px 14px; font-size: 12px; color: var(--muted); font-weight: 500; margin-bottom: 28px; opacity: 0; animation: fadeUp 0.8s 0.7s forwards; }
+.hero-trust-badge-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--lime); flex-shrink: 0; }
+
 @media (max-width: 960px) {
   nav { padding: 14px 20px; }
   .nav-logo { position: static; }
   .nav-links { display: none; }
-  .hero { grid-template-columns: 1fr; padding: 110px 24px 60px; gap: 40px; }
+  .nav-contacts { right: 52px; gap: 6px; }
+  .burger-btn { display: flex; }
+  .hero { grid-template-columns: 1fr; padding: 90px 20px 100px; gap: 32px; }
   .hero-right { width: 100%; align-items: center; }
   .float-card-wrap { width: 100%; max-width: 360px; }
   .float-card { width: 100%; }
   .hero-switcher { width: 100% !important; max-width: 360px; }
   .product-layout { grid-template-columns: 1fr; gap: 36px; }
   .product-layout.reverse { direction: ltr; }
-  section { padding: 60px 20px; }
+  section { padding: 48px 20px; }
   .synergy-grid { grid-template-columns: 1fr; gap: 16px; }
   .syn-middle { display: none; }
-  footer { flex-direction: column; gap: 12px; text-align: center; }
+  footer { flex-direction: column; gap: 12px; text-align: center; padding-bottom: 90px; }
   .divider { margin: 0 20px; }
+  .bottom-bar { display: block; }
+  body { padding-bottom: 0; }
+  .pricing-cards { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; padding-bottom: 8px; gap: 14px; }
+  .pricing-cards::-webkit-scrollbar { display: none; }
+  .price-card { flex: 0 0 82%; scroll-snap-align: center; }
+  .testimonials-grid { grid-template-columns: 1fr; }
+  .steps-grid { grid-template-columns: 1fr; }
+  .steps-grid::before { display: none; }
+  .hero-cta { flex-direction: column; align-items: flex-start; }
+  .hero-title { font-size: clamp(42px, 11vw, 70px); }
 }
 
 /* ── CLEAN DARK THEME ───────────────────────── */
@@ -734,7 +771,19 @@ nav {
     <a href="https://t.me/+35795951176" target="_blank" class="nav-contact-btn" title="Telegram"><i class="ti ti-brand-telegram"></i></a>
     <a href="https://wa.me/35795951176" target="_blank" class="nav-contact-btn nav-contact-btn--wa" title="WhatsApp"><i class="ti ti-brand-whatsapp"></i></a>
   </div>
+  <button class="burger-btn" id="burgerBtn" onclick="toggleBurger()" aria-label="Меню">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#products" onclick="closeBurger()">Продукты</a>
+  <a href="#reviews" onclick="closeBurger()">Отзывы</a>
+  <a href="#pricing" onclick="closeBurger()">Цены</a>
+  <a href="#ai" onclick="closeBurger()">AI</a>
+  <a href="#faq" onclick="closeBurger()">FAQ</a>
+  <a href="#" onclick="openModal();closeBurger();return false" style="color:var(--lime)">Записаться на демо →</a>
+</div>
 
 <!-- HERO -->
 <section class="hero">
@@ -749,6 +798,7 @@ nav {
       <span class="accent">ПРОЦЕССОМ!</span>
     </h1>
     <p class="hero-sub">Два инструмента — кто работает и что строится. Всё под контролем, без Excel и мессенджеров.</p>
+    <div class="hero-trust-badge"><div class="hero-trust-badge-dot"></div>Основано на опыте 23 проектов и 1 400+ смен в день</div>
     <div class="hero-cta">
       <button class="btn-primary" onclick="openModal()"><i class="ti ti-calendar"></i> Записаться на демо</button>
       <a href="#pricing" class="btn-secondary"><i class="ti ti-tag"></i> Посмотреть цены</a>
@@ -1671,7 +1721,31 @@ async function submitForm() {
     setTimeout(() => { btn.textContent = 'Отправить заявку'; btn.style.background = ''; }, 2500);
   }
 }
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeModal(); closeBurger(); } });
+
+/* BURGER */
+function toggleBurger() {
+  const btn = document.getElementById('burgerBtn');
+  const menu = document.getElementById('mobileMenu');
+  btn.classList.toggle('open');
+  menu.classList.toggle('open');
+}
+function closeBurger() {
+  document.getElementById('burgerBtn').classList.remove('open');
+  document.getElementById('mobileMenu').classList.remove('open');
+}
+
+/* HERO CARD SWIPE */
+(function() {
+  const wrap = document.querySelector('.float-card-wrap');
+  if (!wrap) return;
+  let startX = 0;
+  wrap.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, { passive: true });
+  wrap.addEventListener('touchend', e => {
+    const diff = startX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 40) switchCard(diff > 0 ? 1 : 0);
+  }, { passive: true });
+})();
 
 /* FAQ */
 function toggleFaq(question) {
@@ -1681,5 +1755,14 @@ function toggleFaq(question) {
   if (!isOpen) item.classList.add('open');
 }
 </script>
+
+<div class="bottom-bar">
+  <div class="bottom-bar-inner">
+    <button class="bottom-bar-btn bottom-bar-btn--demo" onclick="openModal()"><i class="ti ti-calendar"></i> Демо</button>
+    <a href="https://t.me/+35795951176" target="_blank" class="bottom-bar-btn bottom-bar-btn--tg"><i class="ti ti-brand-telegram"></i> Telegram</a>
+    <a href="https://wa.me/35795951176" target="_blank" class="bottom-bar-btn bottom-bar-btn--wa"><i class="ti ti-brand-whatsapp"></i> WhatsApp</a>
+  </div>
+</div>
+
 </body>
 </html>
