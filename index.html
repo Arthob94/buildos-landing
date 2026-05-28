@@ -557,6 +557,11 @@ footer {
 
 /* hero-right sized above */
 
+/* AI BLOCK */
+.ai-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; margin-top: 48px; }
+.ai-examples-list { display: flex; flex-direction: column; gap: 12px; }
+.ai-cta-bar { margin-top: 40px; padding: 24px 32px; background: rgba(200,241,53,0.06); border: 1px solid rgba(200,241,53,0.2); border-radius: 12px; display: flex; align-items: center; justify-content: space-between; gap: 32px; flex-wrap: wrap; }
+
 /* BURGER MENU */
 .burger-btn { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 6px; position: absolute; right: 16px; }
 .burger-btn span { display: block; width: 22px; height: 2px; background: var(--text); border-radius: 2px; transition: all 0.3s; }
@@ -610,6 +615,22 @@ footer {
   .steps-grid::before { display: none; }
   .hero-cta { flex-direction: column; align-items: flex-start; }
   .hero-title { font-size: clamp(42px, 11vw, 70px); }
+
+  /* AI block mobile */
+  .ai-grid { grid-template-columns: 1fr; gap: 32px; margin-top: 32px; }
+  .ai-examples-list { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; gap: 12px; flex-direction: row; padding-bottom: 4px; }
+  .ai-examples-list::-webkit-scrollbar { display: none; }
+  .ai-examples-list > div { flex: 0 0 78%; scroll-snap-align: center; }
+  .ai-cta-bar { flex-direction: column; align-items: stretch; padding: 20px; gap: 16px; }
+  .ai-cta-bar a { text-align: center; }
+
+  /* Pricing mobile */
+  .pricing-controls { gap: 14px; margin: 24px 0; }
+  .pricing-toggle-group { width: 100%; }
+  .ptog { padding: 8px 12px; font-size: 12px; flex: 1; justify-content: center; }
+  .price-card { padding: 22px 18px; }
+  .price-plan { font-size: 22px; }
+  .price-main { font-size: 28px; }
 }
 
 /* ── CLEAN DARK THEME ───────────────────────── */
@@ -1342,11 +1363,11 @@ nav {
   <h2 class="section-title reveal">Узнай всё о своих объектах<br><span style="color:var(--lime)">за 10 секунд</span></h2>
   <p class="section-desc reveal">Просто напиши вопрос. AI смотрит в твои данные и отвечает — не нужно заходить в систему и искать по вкладкам. Работает с телефона, пока едешь на объект.</p>
 
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start;margin-top:48px">
+  <div class="ai-grid">
 
     <div class="reveal">
-      <div style="font-size:12px;color:var(--lime);font-weight:700;text-transform:uppercase;letter-spacing:2px;margin-bottom:24px">Примеры запросов</div>
-      <div style="display:flex;flex-direction:column;gap:12px">
+      <div style="font-size:12px;color:var(--lime);font-weight:700;text-transform:uppercase;letter-spacing:2px;margin-bottom:16px">Примеры запросов</div>
+      <div class="ai-examples-list">
         <div style="background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:16px 20px">
           <div style="font-size:12px;color:var(--muted);margin-bottom:6px">Time Management</div>
           <div style="font-size:14px;font-weight:600">"Кто из рабочих не вышел сегодня на объект Никосия?"</div>
@@ -1402,7 +1423,7 @@ nav {
 
   </div>
 
-  <div style="margin-top:40px;padding:24px 32px;background:rgba(200,241,53,0.06);border:1px solid rgba(200,241,53,0.2);border-radius:12px;display:flex;align-items:center;justify-content:space-between;gap:32px;flex-wrap:wrap">
+  <div class="ai-cta-bar">
     <div>
       <div style="font-size:13px;color:var(--lime);font-weight:700;margin-bottom:6px">Включено в пакет РОСТ</div>
       <div style="font-size:13px;color:var(--muted);max-width:680px">Работает с вашим ChatGPT или Claude — платите только за то, что используете. Подключение, 10 готовых скиллов и обучение команды включены в подписку.</div>
