@@ -481,6 +481,15 @@ footer {
 }
 .footer-logo { font-family: var(--font-display); font-size: 28px; letter-spacing: 3px; color: var(--lime); }
 .footer-copy { font-size: 13px; color: var(--muted); }
+.footer-contacts { display: flex; gap: 10px; }
+.footer-contact-btn { display: flex; align-items: center; justify-content: center; width: 38px; height: 38px; border-radius: 10px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: var(--muted); font-size: 20px; text-decoration: none; transition: all 0.2s; }
+.footer-contact-btn:hover { background: rgba(41,182,246,0.15); border-color: #29b6f6; color: #29b6f6; }
+.footer-contact-btn--wa:hover { background: rgba(37,211,102,0.15); border-color: #25d366; color: #25d366; }
+.nav-contacts { position: absolute; right: 48px; display: flex; gap: 8px; align-items: center; }
+.nav-contact-btn { display: flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 9px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: var(--muted); font-size: 18px; text-decoration: none; transition: all 0.2s; }
+.nav-contact-btn:hover { background: rgba(41,182,246,0.15); border-color: #29b6f6; color: #29b6f6; }
+.nav-contact-btn--wa:hover { background: rgba(37,211,102,0.15); border-color: #25d366; color: #25d366; }
+@media (max-width: 960px) { .nav-contacts { right: 20px; } }
 
 /* UTILS */
 .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.7s, transform 0.7s; }
@@ -720,6 +729,10 @@ nav {
     <a href="#pricing">Цены</a>
     <a href="#ai" style="color:var(--lime)">AI</a>
     <a href="#faq">FAQ</a>
+  </div>
+  <div class="nav-contacts">
+    <a href="https://t.me/+35795951176" target="_blank" class="nav-contact-btn" title="Telegram"><i class="ti ti-brand-telegram"></i></a>
+    <a href="https://wa.me/35795951176" target="_blank" class="nav-contact-btn nav-contact-btn--wa" title="WhatsApp"><i class="ti ti-brand-whatsapp"></i></a>
   </div>
 </nav>
 
@@ -1442,6 +1455,10 @@ nav {
   <div class="footer-logo">BUILD<span style="color:var(--text)">OS</span></div>
   <div class="footer-copy">Цифровые инструменты для строительного бизнеса · 2026</div>
   <div class="footer-copy" style="margin-top:4px"><a href="#" onclick="openModal();return false" style="color:var(--lime);text-decoration:none;font-weight:600;">Записаться на демо →</a></div>
+  <div class="footer-contacts">
+    <a href="https://t.me/+35795951176" target="_blank" class="footer-contact-btn" title="Telegram"><i class="ti ti-brand-telegram"></i></a>
+    <a href="https://wa.me/35795951176" target="_blank" class="footer-contact-btn footer-contact-btn--wa" title="WhatsApp"><i class="ti ti-brand-whatsapp"></i></a>
+  </div>
 </footer>
 
 <script>
