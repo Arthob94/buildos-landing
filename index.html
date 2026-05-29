@@ -1800,20 +1800,22 @@ async function submitForm() {
   btn.disabled = true;
   const text = `🏗 Новая заявка на демо — BuildOS\n\n👤 Имя: ${name}\n📞 Контакт: ${contact}${company ? `\n🏢 Компания: ${company}` : ''}\n\n⏰ ${new Date().toLocaleString('ru-RU', {timeZone:'Europe/Moscow'})}`;
   try {
-    await fetch(`https://api.telegram.org/bot8728272597:AAFu2uQjVEVGrtbFMSpjI4r5OOpJwULncaQ/sendMessage`, {
+    const res = await fetch(`https://api.telegram.org/bot8728272597:AAFu2uQjVEVGrtbFMSpjI4r5OOpJwULncaQ/sendMessage`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ chat_id: 7398422197, text, parse_mode: 'HTML' })
     });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
     btn.textContent = 'Заявка отправлена ✓';
     btn.style.background = '#4caf50';
-    inputs.forEach(i => i.value = '');
+    ['fieldName','fieldPhone','fieldCompany'].forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; });
+    document.getElementById('fieldConsent').checked = false;
     setTimeout(closeModal, 1800);
   } catch(e) {
-    btn.textContent = 'Ошибка. Попробуйте снова.';
+    btn.textContent = 'Ошибка отправки';
     btn.style.background = '#e53935';
     btn.disabled = false;
-    setTimeout(() => { btn.textContent = 'Отправить заявку'; btn.style.background = ''; }, 2500);
+    setTimeout(() => { btn.textContent = 'Отправить заявку'; btn.style.background = ''; }, 3000);
   }
 }
 document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeModal(); closeBurger(); } });
