@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>СтройУправление — AI-платформа управления строительством</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Open Sans', 'sans-serif'],
+            heading: ['Poppins', 'sans-serif'],
+          },
+          colors: {
+            navy: {
+              50:  '#f0f4fa',
+              100: '#d9e4f0',
+              200: '#b0c8e2',
+              300: '#7aa5cc',
+              400: '#4a7fb5',
+              500: '#2d5f99',
+              600: '#1e4880',
+              700: '#163663',
+              800: '#1a365d',
+              900: '#0f1f3d',
+            },
+            blue: {
+              DEFAULT: '#3182ce',
+              hover:   '#2b6cb0',
+              light:   '#ebf4ff',
+            },
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body { font-family: 'Open Sans', sans-serif; background-color: #F8FAFC; color: #020617; }
+
+    .font-heading { font-family: 'Poppins', sans-serif; }
+
+    /* Hero gradient */
+    .hero-bg {
+      background: linear-gradient(135deg, #0f1f3d 0%, #1a365d 45%, #163663 100%);
+    }
+
+    /* Subtle grid pattern on hero */
+    .hero-bg::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(49,130,206,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(49,130,206,0.05) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+    }
+
+    .stat-card { transition: transform 150ms ease, box-shadow 150ms ease; }
+    .stat-card:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(15,31,61,0.12); }
+
+    .feature-card { transition: transform 150ms ease, box-shadow 150ms ease, border-color 150ms ease; }
+    .feature-card:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(15,31,61,0.1); border-color: #3182ce; }
+
+    .security-card { transition: background-color 150ms ease, border-color 150ms ease; }
+    .security-card:hover { background-color: #f0f4fa; border-color: #1a365d; }
+
+    .cta-btn {
+      transition: background-color 150ms ease, transform 100ms ease, box-shadow 150ms ease;
+    }
+    .cta-btn:hover { background-color: #2b6cb0; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(49,130,206,0.35); }
+    .cta-btn:active { transform: translateY(0); }
+
+    .cta-btn-outline {
+      transition: background-color 150ms ease, color 150ms ease;
+    }
+    .cta-btn-outline:hover { background-color: rgba(255,255,255,0.1); }
+
+    .drop-zone {
+      border: 2px dashed rgba(255,255,255,0.25);
+      transition: border-color 150ms ease, background-color 150ms ease;
+      cursor: pointer;
+    }
+    .drop-zone:hover { border-color: #3182ce; background-color: rgba(49,130,206,0.08); }
+
+    .badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(49,130,206,0.15); border: 1px solid rgba(49,130,206,0.3);
+      color: #7ab8f5; font-size: 12px; font-weight: 600;
+      padding: 4px 10px; border-radius: 9999px; letter-spacing: 0.04em;
+    }
+    .badge-dot { width: 6px; height: 6px; background: #3182ce; border-radius: 50%; animation: pulse-dot 2s infinite; }
+    @keyframes pulse-dot { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+    .alert-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      background: rgba(245,101,101,0.12); border: 1px solid rgba(245,101,101,0.3);
+      color: #fc8181; font-size: 11px; font-weight: 600;
+      padding: 2px 8px; border-radius: 4px;
+    }
+
+    .tag {
+      display: inline-block;
+      background: #ebf4ff; color: #2b6cb0;
+      font-size: 11px; font-weight: 600;
+      padding: 2px 8px; border-radius: 4px; letter-spacing: 0.02em;
+    }
+
+    /* Gantt chart demo */
+    .gantt-bar {
+      height: 12px; border-radius: 6px;
+      animation: grow-bar 1.2s ease-out forwards;
+      transform-origin: left;
+    }
+    @keyframes grow-bar { from{transform:scaleX(0)} to{transform:scaleX(1)} }
+
+    .nav-link { transition: color 150ms ease; }
+    .nav-link:hover { color: #3182ce; }
+
+    .form-input {
+      transition: border-color 150ms ease, box-shadow 150ms ease;
+    }
+    .form-input:focus { outline: none; border-color: #3182ce; box-shadow: 0 0 0 3px rgba(49,130,206,0.15); }
+
+    .tech-pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: #F8FAFC; border: 1px solid #e2e8f0;
+      padding: 6px 12px; border-radius: 8px; font-size: 13px; font-weight: 500; color: #334155;
+      transition: border-color 150ms ease, color 150ms ease;
+    }
+    .tech-pill:hover { border-color: #3182ce; color: #1e4880; }
+
+    /* Input placeholder */
+    input::placeholder { color: #64748b; opacity: 1; }
+
+    /* Gallery tabs — scrollable on mobile, no visible scrollbar */
+    .tabs-scroll { -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+    .tabs-scroll::-webkit-scrollbar { display: none; }
+
+    /* Mobile menu */
+    #mobile-menu {
+      display: none; position: fixed; inset: 0; z-index: 40;
+      background: rgba(15,31,61,0.97);
+    }
+    #mobile-menu.open { display: flex; flex-direction: column; }
+
+    /* Touch-friendly tap targets */
+    @media (max-width: 767px) {
+      .feature-card, .security-card { transform: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════ MOBILE MENU -->
+<div id="mobile-menu" role="dialog" aria-modal="true" aria-label="Навигация">
+  <div class="flex items-center justify-between px-5 h-16 border-b" style="border-color:rgba(255,255,255,0.1);">
+    <div class="flex items-center gap-2">
+      <div class="w-7 h-7 rounded-lg flex items-center justify-center" style="background:rgba(49,130,206,0.3);">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      </div>
+      <span class="font-heading text-sm font-700 text-white" style="font-weight:700;">СтройУправление</span>
+    </div>
+    <button onclick="closeMobileMenu()" class="cursor-pointer w-10 h-10 flex items-center justify-center rounded-lg" style="color:#a0b8d8;" aria-label="Закрыть меню">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <nav class="flex flex-col p-6 gap-1 flex-1">
+    <a href="#features" onclick="closeMobileMenu()" class="cursor-pointer px-4 py-3.5 rounded-xl text-base font-semibold" style="color:#e2e8f0;">Возможности</a>
+    <a href="#screenshots" onclick="closeMobileMenu()" class="cursor-pointer px-4 py-3.5 rounded-xl text-base font-semibold" style="color:#e2e8f0;">Скриншоты</a>
+    <a href="#security" onclick="closeMobileMenu()" class="cursor-pointer px-4 py-3.5 rounded-xl text-base font-semibold" style="color:#e2e8f0;">Безопасность</a>
+    <a href="#stack" onclick="closeMobileMenu()" class="cursor-pointer px-4 py-3.5 rounded-xl text-base font-semibold" style="color:#e2e8f0;">Технологии</a>
+    <div class="mt-auto pt-6">
+      <a href="#contact" onclick="closeMobileMenu()" class="cta-btn cursor-pointer flex items-center justify-center gap-2 text-white font-semibold px-6 py-4 rounded-xl w-full" style="background:#3182ce;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 10l-4 4l6 6l4-16l-18 7l4 2l2 6l3-4"/></svg>
+        Запросить демо
+      </a>
+    </div>
+  </nav>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ HEADER -->
+<header class="sticky top-0 z-50 bg-white/95 backdrop-blur border-b" style="border-bottom-color:#e2e8f0;">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+    <!-- Logo -->
+    <div class="flex items-center gap-2 sm:gap-3">
+      <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style="background:#1a365d;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+      </div>
+      <span class="font-heading font-700 text-sm sm:text-base" style="color:#1a365d; font-weight:700;">СтройУправление</span>
+      <span class="badge hidden lg:inline-flex">
+        <span class="badge-dot"></span>AI-Powered v1.2
+      </span>
+    </div>
+    <!-- Desktop Nav -->
+    <nav class="hidden md:flex items-center gap-7 text-sm font-medium" style="color:#475569;">
+      <a href="#features"     class="nav-link cursor-pointer">Возможности</a>
+      <a href="#screenshots"  class="nav-link cursor-pointer">Скриншоты</a>
+      <a href="#security"     class="nav-link cursor-pointer">Безопасность</a>
+      <a href="#stack"        class="nav-link cursor-pointer">Технологии</a>
+    </nav>
+    <!-- Right side -->
+    <div class="flex items-center gap-2">
+      <a href="#contact" class="cta-btn cursor-pointer hidden sm:inline-flex items-center gap-2 text-white text-sm font-semibold px-4 py-2 rounded-lg" style="background:#3182ce;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 10l-4 4l6 6l4-16l-18 7l4 2l2 6l3-4"/></svg>
+        Запросить демо
+      </a>
+      <!-- Mobile burger -->
+      <button onclick="openMobileMenu()" class="md:hidden cursor-pointer w-10 h-10 flex items-center justify-center rounded-lg" style="color:#334155;" aria-label="Открыть меню">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════════════════════════════════════════════════════ HERO -->
+<section class="hero-bg relative overflow-hidden">
+  <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 pt-12 sm:pt-20 pb-14 sm:pb-24">
+
+    <div class="max-w-3xl">
+      <!-- Eyebrow -->
+      <div class="inline-flex items-center gap-2 text-xs font-semibold tracking-widest uppercase mb-6" style="color:#7ab8f5;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        ERP-платформа нового поколения
+      </div>
+
+      <!-- Headline -->
+      <h1 class="font-heading text-4xl md:text-5xl lg:text-6xl font-800 leading-tight mb-6" style="color:#fff; font-weight:800; line-height:1.15;">
+        Забудьте об Excel.<br/>
+        <span style="color:#3182ce;">Расписание объекта</span><br/>
+        за&nbsp;10 секунд с&nbsp;AI.
+      </h1>
+
+      <!-- Subheadline -->
+      <p class="text-base md:text-lg mb-10 max-w-2xl" style="color:#a0b8d8; line-height:1.75;">
+        Загрузите смету — и платформа автоматически создаёт диаграмму Ганта, синхронизирует сроки,
+        исполнителей, объёмы и финансы по всем вашим объектам одновременно.
+      </p>
+
+      <!-- CTAs -->
+      <div class="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-3 mb-10 sm:mb-14">
+        <a href="#contact" class="cta-btn cursor-pointer inline-flex items-center justify-center gap-2 text-white font-semibold px-6 py-3.5 sm:py-3 rounded-lg text-sm" style="background:#3182ce;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          Попробовать AI-импорт сметы
+        </a>
+        <a href="#features" class="cta-btn-outline cursor-pointer inline-flex items-center justify-center gap-2 font-semibold px-6 py-3 rounded-lg text-sm border" style="color:#e2e8f0; border-color:rgba(255,255,255,0.2);">
+          Смотреть возможности
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+      </div>
+
+      <!-- Stats row -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <div class="stat-card cursor-default rounded-xl p-4" style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1);">
+          <div class="font-heading text-2xl font-700 mb-1" style="color:#3182ce; font-weight:700;">до 15</div>
+          <div class="text-xs" style="color:#7ab8f5;">объектов<br/>одновременно</div>
+        </div>
+        <div class="stat-card cursor-default rounded-xl p-4" style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1);">
+          <div class="font-heading text-2xl font-700 mb-1" style="color:#3182ce; font-weight:700;">10 сек</div>
+          <div class="text-xs" style="color:#7ab8f5;">импорт сметы<br/>в диаграмму Ганта</div>
+        </div>
+        <div class="stat-card cursor-default rounded-xl p-4" style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1);">
+          <div class="font-heading text-2xl font-700 mb-1" style="color:#3182ce; font-weight:700;">130+</div>
+          <div class="text-xs" style="color:#7ab8f5;">интеграционных<br/>тестов</div>
+        </div>
+        <div class="stat-card cursor-default rounded-xl p-4" style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1);">
+          <div class="font-heading text-2xl font-700 mb-1" style="color:#3182ce; font-weight:700;">0%</div>
+          <div class="text-xs" style="color:#7ab8f5;">перерасхода<br/>по актам</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- File drop zone (right side on desktop, below content on mobile) -->
+    <div class="mt-10 sm:mt-12 lg:mt-0 lg:absolute lg:right-6 lg:top-1/2 lg:-translate-y-1/2 lg:w-80">
+      <div class="drop-zone rounded-2xl p-8 text-center" style="background:rgba(255,255,255,0.04);">
+        <div class="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4" style="background:rgba(49,130,206,0.2);">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#3182ce" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        </div>
+        <p class="font-semibold text-sm mb-1" style="color:#e2e8f0;">Перетащите вашу смету</p>
+        <p class="text-xs mb-4" style="color:#7ab8f5;">Excel, CSV или текст · до 10 MB</p>
+        <button onclick="document.getElementById('lead-email').focus()" class="cta-btn cursor-pointer w-full py-2.5 rounded-lg text-white text-xs font-semibold" style="background:#3182ce;">
+          Выбрать файл
+        </button>
+        <p class="text-xs mt-3" style="color:rgba(160,184,216,0.6);">AI развернёт демо-проект за&nbsp;2 минуты</p>
+      </div>
+
+      <!-- Mini Gantt demo -->
+      <div class="mt-4 rounded-xl p-4" style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.08);">
+        <p class="text-xs font-semibold mb-3" style="color:#7ab8f5;">Пример: автоматический Гант</p>
+        <div class="space-y-2">
+          <div>
+            <div class="flex justify-between text-xs mb-1" style="color:rgba(160,184,216,0.7);">
+              <span>Фундамент</span><span>14 д.</span>
+            </div>
+            <div class="bg-gray-700 rounded-full h-3 overflow-hidden">
+              <div class="gantt-bar h-3" style="width:100%; background:linear-gradient(90deg,#2b6cb0,#3182ce); animation-delay:0.1s;"></div>
+            </div>
+          </div>
+          <div>
+            <div class="flex justify-between text-xs mb-1" style="color:rgba(160,184,216,0.7);">
+              <span>Каркас</span><span>21 д.</span>
+            </div>
+            <div class="bg-gray-700 rounded-full h-3 overflow-hidden">
+              <div class="gantt-bar h-3" style="width:75%; background:linear-gradient(90deg,#276749,#38a169); animation-delay:0.3s;"></div>
+            </div>
+          </div>
+          <div>
+            <div class="flex justify-between text-xs mb-1" style="color:rgba(160,184,216,0.7);">
+              <span>Кровля</span><span>10 д.</span>
+            </div>
+            <div class="bg-gray-700 rounded-full h-3 overflow-hidden">
+              <div class="gantt-bar h-3" style="width:45%; background:linear-gradient(90deg,#744210,#d69e2e); animation-delay:0.5s;"></div>
+            </div>
+          </div>
+          <div>
+            <div class="flex justify-between text-xs mb-1" style="color:rgba(160,184,216,0.7);">
+              <span>Отделка</span><span>30 д.</span>
+            </div>
+            <div class="bg-gray-700 rounded-full h-3 overflow-hidden">
+              <div class="gantt-bar h-3" style="width:20%; background:linear-gradient(90deg,#553c9a,#805ad5); animation-delay:0.7s;"></div>
+            </div>
+          </div>
+        </div>
+        <p class="text-xs mt-3 text-center" style="color:rgba(160,184,216,0.5);">Генерируется автоматически из вашей сметы</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════ PROBLEMS -->
+<section class="py-12 sm:py-16 bg-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6">
+    <div class="text-center mb-12">
+      <p class="tag mb-3">Проблема</p>
+      <h2 class="font-heading text-2xl md:text-3xl font-700 mb-3" style="color:#0f1f3d; font-weight:700;">Узнаёте себя?</h2>
+      <p class="text-sm max-w-lg mx-auto" style="color:#64748b;">Три боли, из-за которых строительные компании теряют деньги и нервы каждый день</p>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+      <div class="feature-card rounded-2xl p-6 border" style="border-color:#e2e8f0;">
+        <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style="background:#fff5f5;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#e53e3e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </div>
+        <h3 class="font-heading text-base font-700 mb-2" style="color:#0f1f3d; font-weight:700;">Хаос устных договорённостей</h3>
+        <p class="text-sm leading-relaxed" style="color:#64748b;">
+          Прораб сказал одно — бригада услышала другое. Задачи в мессенджерах,
+          Excel-таблицы у каждого свои. Кто что сделал — никто не знает.
+        </p>
+      </div>
+
+      <div class="feature-card rounded-2xl p-6 border" style="border-color:#e2e8f0;">
+        <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style="background:#fffbeb;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#d69e2e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        </div>
+        <h3 class="font-heading text-base font-700 mb-2" style="color:#0f1f3d; font-weight:700;">Воровство и ошибки в актах</h3>
+        <p class="text-sm leading-relaxed" style="color:#64748b;">
+          В актах закрывают объёмы выше плановых или цены выше договорных.
+          Заметить это вручную — почти невозможно. Деньги утекают незаметно.
+        </p>
+      </div>
+
+      <div class="feature-card rounded-2xl p-6 border" style="border-color:#e2e8f0;">
+        <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style="background:#f0fff4;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#38a169" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        </div>
+        <h3 class="font-heading text-base font-700 mb-2" style="color:#0f1f3d; font-weight:700;">Накладки бригад между объектами</h3>
+        <p class="text-sm leading-relaxed" style="color:#64748b;">
+          Одна бригада одновременно «назначена» на два объекта.
+          Срывы сроков, штрафы, конфликты с заказчиками — всё из-за отсутствия
+          единого календаря.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════ AI FEATURES -->
+<section id="features" class="py-14 sm:py-20" style="background:#F8FAFC;">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6">
+    <div class="text-center mb-14">
+      <p class="tag mb-3">AI-возможности</p>
+      <h2 class="font-heading text-2xl md:text-3xl font-700 mb-3" style="color:#0f1f3d; font-weight:700;">Революционный AI в строительстве</h2>
+      <p class="text-sm max-w-xl mx-auto" style="color:#64748b;">Два прорывных инструмента, которые меняют способ управления объектами навсегда</p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+      <!-- AI Import -->
+      <div class="feature-card rounded-2xl border p-5 sm:p-8 bg-white" style="border-color:#e2e8f0;">
+        <div class="flex items-start gap-4 mb-6">
+          <div class="w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0" style="background:#ebf4ff;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3182ce" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          </div>
+          <div>
+            <span class="tag mb-1">Мгновенный</span>
+            <h3 class="font-heading text-xl font-700 mt-1" style="color:#0f1f3d; font-weight:700;">AI-импорт сметы</h3>
+          </div>
+        </div>
+        <p class="text-sm leading-relaxed mb-6" style="color:#475569;">
+          Загрузите обычную Excel-смету — и за&nbsp;10 секунд платформа создаёт полноценную
+          интерактивную диаграмму Ганта. Вам остаётся только назначить исполнителей.
+          Никакого ручного ввода, никаких ошибок переноса.
+        </p>
+        <!-- Steps -->
+        <div class="space-y-3">
+          <div class="flex items-center gap-3">
+            <div class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-700 text-white flex-shrink-0" style="background:#3182ce; font-weight:700;">1</div>
+            <span class="text-sm" style="color:#334155;">Загружаете Excel или вставляете текст сметы</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-700 text-white flex-shrink-0" style="background:#3182ce; font-weight:700;">2</div>
+            <span class="text-sm" style="color:#334155;">AI парсит этапы, объёмы, сроки и материалы</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-700 text-white flex-shrink-0" style="background:#3182ce; font-weight:700;">3</div>
+            <span class="text-sm" style="color:#334155;">Диаграмма Ганта готова — назначайте бригады</span>
+          </div>
+        </div>
+        <div class="mt-6 pt-6 border-t" style="border-color:#e2e8f0;">
+          <div class="flex flex-wrap gap-2">
+            <span class="tech-pill cursor-default">.xlsx</span>
+            <span class="tech-pill cursor-default">.csv</span>
+            <span class="tech-pill cursor-default">Текст</span>
+            <span class="tech-pill cursor-default">10 сек</span>
+            <span class="tech-pill cursor-default">Без обучения</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- AI Adaptive -->
+      <div class="feature-card rounded-2xl border p-5 sm:p-8 bg-white" style="border-color:#e2e8f0;">
+        <div class="flex items-start gap-4 mb-6">
+          <div class="w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0" style="background:#f0fff4;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#38a169" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+          </div>
+          <div>
+            <span class="tag mb-1" style="background:#f0fff4; color:#276749;">Claude API / MCP</span>
+            <h3 class="font-heading text-xl font-700 mt-1" style="color:#0f1f3d; font-weight:700;">AI-адаптивный интерфейс</h3>
+          </div>
+        </div>
+        <p class="text-sm leading-relaxed mb-6" style="color:#475569;">
+          Управляйте ERP простыми текстовыми командами — без поиска по меню и обучения сотрудников.
+          Интеграция с Claude API через MCP делает аналитику мгновенной.
+        </p>
+        <!-- Chat examples -->
+        <div class="rounded-xl p-4 space-y-3" style="background:#f8fafc; border:1px solid #e2e8f0;">
+          <div class="flex items-start gap-2">
+            <div class="w-6 h-6 rounded-full flex items-center justify-center text-xs text-white flex-shrink-0" style="background:#3182ce;">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="8" r="4"/><path d="M6 20v-2a4 4 0 018 0v2"/></svg>
+            </div>
+            <div class="rounded-lg rounded-tl-none px-3 py-2 text-xs" style="background:#ebf4ff; color:#1e4880;">«Покажи маржинальность объекта за май»</div>
+          </div>
+          <div class="flex items-start gap-2 flex-row-reverse">
+            <div class="w-6 h-6 rounded-full flex items-center justify-center text-xs text-white flex-shrink-0" style="background:#38a169;">AI</div>
+            <div class="rounded-lg rounded-tr-none px-3 py-2 text-xs max-w-xs" style="background:#f0fff4; color:#276749;">Маржинальность «Жилой комплекс ЮГ»: <strong>23.4%</strong>. Отклонение от плана: +2.1%. Детальный отчёт — готов.</div>
+          </div>
+          <div class="flex items-start gap-2">
+            <div class="w-6 h-6 rounded-full flex items-center justify-center text-xs text-white flex-shrink-0" style="background:#3182ce;">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="8" r="4"/><path d="M6 20v-2a4 4 0 018 0v2"/></svg>
+            </div>
+            <div class="rounded-lg rounded-tl-none px-3 py-2 text-xs" style="background:#ebf4ff; color:#1e4880;">«Какие бригады свободны на следующей неделе?»</div>
+          </div>
+          <div class="flex items-start gap-2 flex-row-reverse">
+            <div class="w-6 h-6 rounded-full flex items-center justify-center text-xs text-white flex-shrink-0" style="background:#38a169;">AI</div>
+            <div class="rounded-lg rounded-tr-none px-3 py-2 text-xs max-w-xs" style="background:#f0fff4; color:#276749;">Свободны: бригада «Альфа» (пн–ср), бригада «Дельта» (вт–пт). Хотите назначить на объект?</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════ SCREENSHOTS GALLERY -->
+<section id="screenshots" class="py-14 sm:py-20 bg-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6">
+    <div class="text-center mb-14">
+      <p class="tag mb-3">Живой интерфейс</p>
+      <h2 class="font-heading text-2xl md:text-3xl font-700 mb-3" style="color:#0f1f3d; font-weight:700;">Платформа в действии</h2>
+      <p class="text-sm max-w-lg mx-auto" style="color:#64748b;">Реальные экраны системы — без маркетинговых mockup-ов</p>
+    </div>
+
+    <!-- Tabs — horizontally scrollable on mobile -->
+    <div class="tabs-scroll overflow-x-auto mb-8 sm:mb-10 -mx-4 sm:mx-0 px-4 sm:px-0">
+      <div class="flex gap-2 sm:flex-wrap sm:justify-center w-max sm:w-auto" id="gallery-tabs">
+        <button onclick="showScreen(0)" data-tab="0" class="gallery-tab cursor-pointer flex-shrink-0 px-4 py-2 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors duration-150" style="background:#1a365d; color:#fff;">
+          Проекты
+        </button>
+        <button onclick="showScreen(1)" data-tab="1" class="gallery-tab cursor-pointer flex-shrink-0 px-4 py-2 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors duration-150" style="background:#f0f4fa; color:#334155;">
+          Диаграмма Ганта
+        </button>
+        <button onclick="showScreen(2)" data-tab="2" class="gallery-tab cursor-pointer flex-shrink-0 px-4 py-2 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors duration-150" style="background:#f0f4fa; color:#334155;">
+          Финансы
+        </button>
+        <button onclick="showScreen(3)" data-tab="3" class="gallery-tab cursor-pointer flex-shrink-0 px-4 py-2 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors duration-150" style="background:#f0f4fa; color:#334155;">
+          Отчёты и аналитика
+        </button>
+        <button onclick="showScreen(4)" data-tab="4" class="gallery-tab cursor-pointer flex-shrink-0 px-4 py-2 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors duration-150" style="background:#f0f4fa; color:#334155;">
+          Календарь бригад
+        </button>
+      </div>
+    </div>
+
+    <!-- Screenshot frame -->
+    <div class="rounded-2xl overflow-hidden shadow-2xl border relative" style="border-color:#e2e8f0;" id="gallery-frame">
+      <!-- Browser chrome bar -->
+      <div class="flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-3" style="background:#1a365d;">
+        <div class="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full flex-shrink-0" style="background:#fc5c65;"></div>
+        <div class="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full flex-shrink-0" style="background:#fed330;"></div>
+        <div class="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full flex-shrink-0" style="background:#26de81;"></div>
+        <div class="flex-1 mx-2 sm:mx-4 rounded-md px-2 sm:px-3 py-1 text-xs truncate" style="background:rgba(255,255,255,0.08); color:rgba(255,255,255,0.5);">
+          app.stroyupravlenie.ru
+        </div>
+        <!-- Mobile nav counter -->
+        <span id="gallery-counter" class="sm:hidden text-xs font-semibold flex-shrink-0" style="color:rgba(255,255,255,0.5);">1 / 5</span>
+      </div>
+      <!-- Images -->
+      <div id="gallery-screens">
+        <img id="screen-0" src="screen-projects.png"         alt="Экран «Проекты» — список всех объектов с бюджетами и прогрессом" class="w-full block" style="display:block;" />
+        <img id="screen-1" src="screen-gantt.png" alt="Диаграмма Ганта — визуальный план работ по этапам"               class="w-full block" style="display:none;" />
+        <img id="screen-2" src="screen-finance.png"         alt="Финансовый дашборд — бюджет, расходы, поступления, баланс"     class="w-full block" style="display:none;" />
+        <img id="screen-3" src="screen-reports.png"          alt="Отчёты и аналитика — портфельный разбор по проектам"           class="w-full block" style="display:none;" />
+        <img id="screen-4" src="screen-calendar.png" alt="Календарь бригад — еженедельное расписание всех команд"        class="w-full block" style="display:none;" />
+      </div>
+      <!-- Mobile prev/next arrows -->
+      <button onclick="galleryPrev()" class="sm:hidden cursor-pointer absolute left-2 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full flex items-center justify-center" style="background:rgba(15,31,61,0.6); color:#fff;" aria-label="Предыдущий">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <button onclick="galleryNext()" class="sm:hidden cursor-pointer absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full flex items-center justify-center" style="background:rgba(15,31,61,0.6); color:#fff;" aria-label="Следующий">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+    </div>
+
+    <!-- Mobile dot indicators -->
+    <div class="flex justify-center gap-2 mt-4 sm:hidden" id="gallery-dots">
+      <button onclick="showScreen(0)" class="gallery-dot w-2 h-2 rounded-full cursor-pointer" style="background:#1a365d;" aria-label="Слайд 1"></button>
+      <button onclick="showScreen(1)" class="gallery-dot w-2 h-2 rounded-full cursor-pointer" style="background:#d1d5db;" aria-label="Слайд 2"></button>
+      <button onclick="showScreen(2)" class="gallery-dot w-2 h-2 rounded-full cursor-pointer" style="background:#d1d5db;" aria-label="Слайд 3"></button>
+      <button onclick="showScreen(3)" class="gallery-dot w-2 h-2 rounded-full cursor-pointer" style="background:#d1d5db;" aria-label="Слайд 4"></button>
+      <button onclick="showScreen(4)" class="gallery-dot w-2 h-2 rounded-full cursor-pointer" style="background:#d1d5db;" aria-label="Слайд 5"></button>
+    </div>
+
+    <!-- Description cards -->
+    <div id="gallery-descs" class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-8">
+
+      <!-- 0 — Проекты -->
+      <div id="desc-0" class="gallery-desc rounded-xl border p-4" style="border-color:#e2e8f0;">
+        <div class="flex items-center gap-2 mb-2">
+          <div class="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0" style="background:#ebf4ff;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#3182ce" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg>
+          </div>
+          <span class="text-xs font-700 font-heading" style="color:#0f1f3d; font-weight:700;">Все объекты в одном месте</span>
+        </div>
+        <p class="text-xs leading-relaxed" style="color:#64748b;">8 активных проектов, суммарный бюджет €34 млн — с прогресс-барами, менеджерами и датами прямо в таблице.</p>
+      </div>
+      <div id="desc-0b" class="gallery-desc rounded-xl border p-4" style="border-color:#e2e8f0;">
+        <div class="flex items-center gap-2 mb-2">
+          <div class="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0" style="background:#f0fff4;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#38a169" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          </div>
+          <span class="text-xs font-700 font-heading" style="color:#0f1f3d; font-weight:700;">Финансы на первом экране</span>
+        </div>
+        <p class="text-xs leading-relaxed" style="color:#64748b;">Суммарный бюджет, доступные средства и статус рисков — без перехода в другие разделы.</p>
+      </div>
+      <div id="desc-0c" class="gallery-desc rounded-xl border p-4" style="border-color:#e2e8f0;">
+        <div class="flex items-center gap-2 mb-2">
+          <div class="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0" style="background:#faf5ff;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#805ad5" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </div>
+          <span class="text-xs font-700 font-heading" style="color:#0f1f3d; font-weight:700;">Быстрый поиск и фильтры</span>
+        </div>
+        <p class="text-xs leading-relaxed" style="color:#64748b;">Фильтрация по статусу, клиенту и менеджеру. Переход в любой объект — в один клик.</p>
+      </div>
+
+      <!-- 1 — Ганта (hidden by default) -->
+      <div id="desc-1" class="gallery-desc hidden rounded-xl border p-4" style="border-color:#e2e8f0;">
+        <div class="flex items-center gap-2 mb-2">
+          <div class="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0" style="background:#ebf4ff;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#3182ce" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+          </div>
+          <span class="text-xs font-700 font-heading" style="color:#0f1f3d; font-weight:700;">Иерархия этапов и задач</span>
+        </div>
+        <p class="text-xs leading-relaxed" style="color:#64748b;">Разворачивающиеся группы работ: от «Подготовительных работ» до «Разработки котлована» — все сроки на одном экране.</p>
+      </div>
+      <div id="desc-1b" class="gallery-desc hidden rounded-xl border p-4" style="border-color:#e2e8f0;">
+        <div class="flex items-center gap-2 mb-2">
+          <div class="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0" style="background:#f0fff4;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#38a169" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          </div>
+          <span class="text-xs font-700 font-heading" style="color:#0f1f3d; font-weight:700;">Сроки и зависимости</span>
+        </div>
+        <p class="text-xs leading-relaxed" style="color:#64748b;">Цветные плашки показывают длительность каждого этапа. Критический путь виден с первого взгляда.</p>
+      </div>
+      <div id="desc-1c" class="gallery-desc hidden rounded-xl border p-4" style="border-color:#e2e8f0;">
+        <div class="flex items-center gap-2 mb-2">
+          <div class="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0" style="background:#fffbeb;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#d69e2e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          </div>
+          <span class="text-xs font-700 font-heading" style="color:#0f1f3d; font-weight:700;">Генерируется из сметы за 10 сек</span>
+        </div>
+        <p class="text-xs leading-relaxed" style="color:#64748b;">AI-импорт преобразует вашу Excel-смету в этот Гант автоматически. Ручной ввод не нужен.</p>
+      </div>
+
+      <!-- 2 — Финансы (hidden) -->
+      <div id="desc-2" class="gallery-desc hidden rounded-xl border p-4" style="border-color:#e2e8f0;">
+        <div class="flex items-center gap-2 mb-2">
+          <div class="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0" style="background:#ebf4ff;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#3182ce" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+          </div>
+          <span class="text-xs font-700 font-heading" style="color:#0f1f3d; font-weight:700;">Бюджет €34 млн под контролем</span>
+        </div>
+        <p class="text-xs leading-relaxed" style="color:#64748b;">Суммарный бюджет, факт расходов (€905K), поступления от клиентов (€2.6M) и баланс (€1.7M) — одним взглядом.</p>
+      </div>
+      <div id="desc-2b" class="gallery-desc hidden rounded-xl border p-4" style="border-color:#e2e8f0;">
+        <div class="flex items-center gap-2 mb-2">
+          <div class="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0" style="background:#f0fff4;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#38a169" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          </div>
+          <span class="text-xs font-700 font-heading" style="color:#0f1f3d; font-weight:700;">Разбивка по каждому объекту</span>
+        </div>
+        <p class="text-xs leading-relaxed" style="color:#64748b;">Под сводкой — детальная таблица по каждому проекту с бюджетом, расходами, поступлениями и мини-графиком.</p>
+      </div>
+      <div id="desc-2c" class="gallery-desc hidden rounded-xl border p-4" style="border-color:#e2e8f0;">
+        <div class="flex items-center gap-2 mb-2">
+          <div class="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0" style="background:#fff5f5;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#e53e3e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          </div>
+          <span class="text-xs font-700 font-heading" style="color:#0f1f3d; font-weight:700;">Перерасход невозможен</span>
+        </div>
+        <p class="text-xs leading-relaxed" style="color:#64748b;">CHECK-constraints на уровне БД блокируют любую попытку закрыть акт выше планового значения.</p>
+      </div>
+
+      <!-- 3 — Отчёты (hidden) -->
+      <div id="desc-3" class="gallery-desc hidden rounded-xl border p-4" style="border-color:#e2e8f0;">
+        <div class="flex items-center gap-2 mb-2">
+          <div class="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0" style="background:#ebf4ff;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#3182ce" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          </div>
+          <span class="text-xs font-700 font-heading" style="color:#0f1f3d; font-weight:700;">Портфельный разбор</span>
+        </div>
+        <p class="text-xs leading-relaxed" style="color:#64748b;">Сводная таблица по всем проектам: менеджер, прогресс, количество задач, статус, поступления — в одной строке.</p>
+      </div>
+      <div id="desc-3b" class="gallery-desc hidden rounded-xl border p-4" style="border-color:#e2e8f0;">
+        <div class="flex items-center gap-2 mb-2">
+          <div class="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0" style="background:#f0fff4;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#38a169" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+          </div>
+          <span class="text-xs font-700 font-heading" style="color:#0f1f3d; font-weight:700;">Бюджет и факт рядом</span>
+        </div>
+        <p class="text-xs leading-relaxed" style="color:#64748b;">Плановый бюджет €34.7M и факт расходов €905K выведены в шапке — видно отклонение за секунду.</p>
+      </div>
+      <div id="desc-3c" class="gallery-desc hidden rounded-xl border p-4" style="border-color:#e2e8f0;">
+        <div class="flex items-center gap-2 mb-2">
+          <div class="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0" style="background:#faf5ff;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#805ad5" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <span class="text-xs font-700 font-heading" style="color:#0f1f3d; font-weight:700;">Подзоны отчёта</span>
+        </div>
+        <p class="text-xs leading-relaxed" style="color:#64748b;">Навигация по вкладкам: все расходы, все поступления — гибкая аналитика без дополнительных настроек.</p>
+      </div>
+
+      <!-- 4 — Календарь (hidden) -->
+      <div id="desc-4" class="gallery-desc hidden rounded-xl border p-4" style="border-color:#e2e8f0;">
+        <div class="flex items-center gap-2 mb-2">
+          <div class="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0" style="background:#ebf4ff;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#3182ce" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          </div>
+          <span class="text-xs font-700 font-heading" style="color:#0f1f3d; font-weight:700;">Все бригады на одном экране</span>
+        </div>
+        <p class="text-xs leading-relaxed" style="color:#64748b;">Цветные блоки по каждой бригаде на неделю вперёд. Сразу видно: кто занят, где окно, где накладка.</p>
+      </div>
+      <div id="desc-4b" class="gallery-desc hidden rounded-xl border p-4" style="border-color:#e2e8f0;">
+        <div class="flex items-center gap-2 mb-2">
+          <div class="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0" style="background:#fff5f5;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#e53e3e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          </div>
+          <span class="text-xs font-700 font-heading" style="color:#0f1f3d; font-weight:700;">Конфликты выделяются автоматически</span>
+        </div>
+        <p class="text-xs leading-relaxed" style="color:#64748b;">Система подсвечивает пересечения расписания — двойное назначение невозможно ни случайно, ни намеренно.</p>
+      </div>
+      <div id="desc-4c" class="gallery-desc hidden rounded-xl border p-4" style="border-color:#e2e8f0;">
+        <div class="flex items-center gap-2 mb-2">
+          <div class="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0" style="background:#f0fff4;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#38a169" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+          </div>
+          <span class="text-xs font-700 font-heading" style="color:#0f1f3d; font-weight:700;">Несколько субподрядчиков</span>
+        </div>
+        <p class="text-xs leading-relaxed" style="color:#64748b;">Субподрядчики ЭМО, Механика, Архитектура — каждый видит только своё расписание, руководитель — всё сразу.</p>
+      </div>
+
+    </div><!-- /gallery-descs -->
+  </div>
+</section>
+
+<script>
+  /* ── Gallery ── */
+  const screens = [
+    { id: 'screen-0', descs: ['desc-0','desc-0b','desc-0c'] },
+    { id: 'screen-1', descs: ['desc-1','desc-1b','desc-1c'] },
+    { id: 'screen-2', descs: ['desc-2','desc-2b','desc-2c'] },
+    { id: 'screen-3', descs: ['desc-3','desc-3b','desc-3c'] },
+    { id: 'screen-4', descs: ['desc-4','desc-4b','desc-4c'] },
+  ];
+  let currentScreen = 0;
+
+  const screenLabels = ['Проекты','Диаграмма Ганта','Финансы','Отчёты','Календарь'];
+
+  function showScreen(idx) {
+    currentScreen = idx;
+    screens.forEach((s, i) => {
+      document.getElementById(s.id).style.display = i === idx ? 'block' : 'none';
+      s.descs.forEach(d => {
+        const el = document.getElementById(d);
+        if (el) el.classList.toggle('hidden', i !== idx);
+      });
+    });
+    document.querySelectorAll('.gallery-tab').forEach((btn, i) => {
+      btn.style.background = i === idx ? '#1a365d' : '#f0f4fa';
+      btn.style.color      = i === idx ? '#fff'    : '#334155';
+    });
+    document.querySelectorAll('.gallery-dot').forEach((dot, i) => {
+      dot.style.background = i === idx ? '#1a365d' : '#d1d5db';
+    });
+    const counter = document.getElementById('gallery-counter');
+    if (counter) counter.textContent = (idx + 1) + ' / ' + screens.length;
+  }
+
+  function galleryNext() { showScreen((currentScreen + 1) % screens.length); }
+  function galleryPrev() { showScreen((currentScreen + screens.length - 1) % screens.length); }
+
+  /* Touch swipe on gallery */
+  (function() {
+    let startX = 0;
+    const frame = document.getElementById('gallery-frame');
+    if (!frame) return;
+    frame.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, { passive: true });
+    frame.addEventListener('touchend', e => {
+      const dx = e.changedTouches[0].clientX - startX;
+      if (Math.abs(dx) > 40) { dx < 0 ? galleryNext() : galleryPrev(); }
+    }, { passive: true });
+  })();
+
+  /* ── Mobile menu ── */
+  function openMobileMenu() {
+    const menu = document.getElementById('mobile-menu');
+    menu.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeMobileMenu() {
+    const menu = document.getElementById('mobile-menu');
+    menu.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  /* Close on ESC */
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMobileMenu(); });
+</script>
+
+<!-- ═══════════════════════════════════════════════════════════ SECURITY -->
+<section id="security" class="py-14 sm:py-20 bg-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6">
+    <div class="text-center mb-14">
+      <p class="tag mb-3" style="background:#fff5f5; color:#c53030;">Финансовая защита</p>
+      <h2 class="font-heading text-2xl md:text-3xl font-700 mb-3" style="color:#0f1f3d; font-weight:700;">Жёсткий контроль на уровне базы данных</h2>
+      <p class="text-sm max-w-xl mx-auto" style="color:#64748b;">
+        Защита встроена не в интерфейс — она зашита в саму архитектуру.
+        Ни один пользователь не обойдёт её случайно или намеренно.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+
+      <div class="security-card rounded-2xl border p-6 cursor-default" style="border-color:#e2e8f0;">
+        <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style="background:#fff5f5;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#e53e3e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div class="alert-badge mb-3">CHECK-constraint</div>
+        <h3 class="font-heading text-sm font-700 mb-2" style="color:#0f1f3d; font-weight:700;">Защита актов от перерасхода</h3>
+        <p class="text-xs leading-relaxed" style="color:#64748b;">
+          База данных физически блокирует закрытие объёма или цены в актах выше плановых значений.
+          Даже с правами администратора.
+        </p>
+      </div>
+
+      <div class="security-card rounded-2xl border p-6 cursor-default" style="border-color:#e2e8f0;">
+        <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style="background:#fffbeb;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#d69e2e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg>
+        </div>
+        <div class="inline-block text-xs font-semibold px-2 py-0.5 rounded mb-3" style="background:#fffbeb; color:#b7791f;">Кросс-проектный</div>
+        <h3 class="font-heading text-sm font-700 mb-2" style="color:#0f1f3d; font-weight:700;">Единый календарь бригад</h3>
+        <p class="text-xs leading-relaxed" style="color:#64748b;">
+          Система автоматически обнаруживает конфликты расписания
+          и не допускает двойного назначения бригады на несколько объектов одновременно.
+        </p>
+      </div>
+
+      <div class="security-card rounded-2xl border p-6 cursor-default" style="border-color:#e2e8f0;">
+        <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style="background:#ebf4ff;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3182ce" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        </div>
+        <div class="inline-block text-xs font-semibold px-2 py-0.5 rounded mb-3" style="background:#ebf4ff; color:#2b6cb0;">task_history</div>
+        <h3 class="font-heading text-sm font-700 mb-2" style="color:#0f1f3d; font-weight:700;">Тотальный аудит изменений</h3>
+        <p class="text-xs leading-relaxed" style="color:#64748b;">
+          Каждое изменение в системе — кто, когда и что изменил —
+          записывается в неизменяемый журнал. Полная прозрачность на всех уровнях.
+        </p>
+      </div>
+
+      <div class="security-card rounded-2xl border p-6 cursor-default" style="border-color:#e2e8f0;">
+        <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style="background:#fefcbf;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#d69e2e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </div>
+        <div class="inline-block text-xs font-semibold px-2 py-0.5 rounded mb-3" style="background:#fefcbf; color:#b7791f;">Предупреждение 85%</div>
+        <h3 class="font-heading text-sm font-700 mb-2" style="color:#0f1f3d; font-weight:700;">Автоматические алерты бюджета</h3>
+        <p class="text-xs leading-relaxed" style="color:#64748b;">
+          При достижении 85% расходов по этапу система автоматически
+          уведомляет руководителя — до того, как бюджет исчерпан.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════ TECH STACK -->
+<section id="stack" class="py-14 sm:py-20" style="background:#F8FAFC;">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+
+      <div>
+        <p class="tag mb-4">Технологии и доверие</p>
+        <h2 class="font-heading text-2xl md:text-3xl font-700 mb-4" style="color:#0f1f3d; font-weight:700;">
+          Зрелая архитектура.<br/>Европейские стандарты.
+        </h2>
+        <p class="text-sm leading-relaxed mb-8" style="color:#475569;">
+          Платформа разработана на Кипре по европейским стандартам качества и безопасности.
+          Мы не жертвуем надёжностью ради скорости — каждая функция покрыта тестами
+          и защищена на уровне схемы БД.
+        </p>
+
+        <div class="space-y-4">
+          <div class="flex items-center gap-3">
+            <div class="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0" style="background:#ebf4ff;">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#3182ce" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <span class="text-sm" style="color:#334155;"><strong>130+ интеграционных тестов</strong> — каждый релиз проверен автоматически</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0" style="background:#ebf4ff;">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#3182ce" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <span class="text-sm" style="color:#334155;"><strong>Soft Delete архитектура</strong> — данные никогда не удаляются безвозвратно</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0" style="background:#ebf4ff;">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#3182ce" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <span class="text-sm" style="color:#334155;"><strong>PostgreSQL CHECK-constraints</strong> — бизнес-правила на уровне схемы</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0" style="background:#ebf4ff;">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#3182ce" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <span class="text-sm" style="color:#334155;"><strong>Разработка на Кипре</strong> — европейские стандарты, GDPR-совместимость</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+
+        <div class="rounded-2xl border p-5 bg-white" style="border-color:#e2e8f0;">
+          <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-3" style="background:#f0fff4;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#38a169" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          </div>
+          <div class="font-heading text-base font-700 mb-1" style="color:#0f1f3d; font-weight:700;">FastAPI</div>
+          <p class="text-xs" style="color:#64748b;">Backend · Python · Async · OpenAPI docs</p>
+        </div>
+
+        <div class="rounded-2xl border p-5 bg-white" style="border-color:#e2e8f0;">
+          <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-3" style="background:#ebf4ff;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3182ce" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          </div>
+          <div class="font-heading text-base font-700 mb-1" style="color:#0f1f3d; font-weight:700;">Next.js 15</div>
+          <p class="text-xs" style="color:#64748b;">Frontend · React · SSR · App Router</p>
+        </div>
+
+        <div class="rounded-2xl border p-5 bg-white" style="border-color:#e2e8f0;">
+          <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-3" style="background:#faf5ff;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#805ad5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+          </div>
+          <div class="font-heading text-base font-700 mb-1" style="color:#0f1f3d; font-weight:700;">PostgreSQL 16</div>
+          <p class="text-xs" style="color:#64748b;">Database · ACID · Constraints · Audit</p>
+        </div>
+
+        <div class="rounded-2xl border p-5 bg-white" style="border-color:#e2e8f0;">
+          <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-3" style="background:#fff5f5;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#e53e3e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8.56 2.75c4.37 6.03 6.02 9.42 8.03 17.72m2.54-15.38c-3.72 4.35-8.94 5.66-16.88 5.85m19.5 1.9c-3.5-.93-6.63-.82-8.94 0-2.58.92-5.01 2.86-7.44 6.32"/></svg>
+          </div>
+          <div class="font-heading text-base font-700 mb-1" style="color:#0f1f3d; font-weight:700;">Claude API</div>
+          <p class="text-xs" style="color:#64748b;">AI Core · MCP · Claude 3.5 Sonnet</p>
+        </div>
+
+        <!-- Cyprus badge -->
+        <div class="col-span-2 rounded-2xl border p-5 bg-white flex items-center gap-4" style="border-color:#e2e8f0;">
+          <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style="background:#f0f4fa;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1a365d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+          </div>
+          <div>
+            <div class="font-heading text-sm font-700 mb-0.5" style="color:#0f1f3d; font-weight:700;">Разработка на Кипре · European Standards</div>
+            <p class="text-xs" style="color:#64748b;">GDPR-совместимость · ISO-качество кода · Европейская юрисдикция</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════ FINAL CTA -->
+<section id="contact" class="py-14 sm:py-20" style="background:#0f1f3d;">
+  <div class="max-w-2xl mx-auto px-4 sm:px-6 text-center">
+    <p class="text-xs font-semibold tracking-widest uppercase mb-4" style="color:#7ab8f5;">Начните прямо сейчас</p>
+    <h2 class="font-heading text-2xl md:text-3xl font-700 mb-4 text-white" style="font-weight:700;">
+      Загрузите вашу смету.<br/>
+      <span style="color:#3182ce;">Демо-проект за 2 минуты.</span>
+    </h2>
+    <p class="text-sm mb-10" style="color:#a0b8d8; line-height:1.75;">
+      Наш AI проанализирует вашу реальную смету и развернёт полноценный
+      демо-проект с диаграммой Ганта, бюджетом и командой.
+      Без регистрации — просто загрузите файл.
+    </p>
+
+    <!-- Form -->
+    <div class="rounded-2xl p-5 sm:p-8 text-left" style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1);">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+        <div>
+          <label for="lead-name" class="block text-xs font-semibold mb-1.5" style="color:#a0b8d8;">Ваше имя</label>
+          <input
+            id="lead-name"
+            type="text"
+            placeholder="Александр Петров"
+            class="form-input w-full rounded-lg px-4 py-2.5 text-sm bg-transparent border"
+            style="border-color:rgba(255,255,255,0.15); color:#e2e8f0; placeholder-color:#64748b;"
+          />
+        </div>
+        <div>
+          <label for="lead-company" class="block text-xs font-semibold mb-1.5" style="color:#a0b8d8;">Компания</label>
+          <input
+            id="lead-company"
+            type="text"
+            placeholder="СК «Стройпром»"
+            class="form-input w-full rounded-lg px-4 py-2.5 text-sm bg-transparent border"
+            style="border-color:rgba(255,255,255,0.15); color:#e2e8f0;"
+          />
+        </div>
+      </div>
+      <div class="mb-4">
+        <label for="lead-email" class="block text-xs font-semibold mb-1.5" style="color:#a0b8d8;">Email</label>
+        <input
+          id="lead-email"
+          type="email"
+          placeholder="a.petrov@stroycompany.ru"
+          class="form-input w-full rounded-lg px-4 py-2.5 text-sm bg-transparent border"
+          style="border-color:rgba(255,255,255,0.15); color:#e2e8f0;"
+        />
+      </div>
+      <div class="mb-6">
+        <label class="block text-xs font-semibold mb-1.5" style="color:#a0b8d8;">Прикрепите смету (опционально)</label>
+        <div class="drop-zone rounded-xl p-5 text-center">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7ab8f5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mx-auto mb-2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          <p class="text-xs" style="color:#7ab8f5;">Перетащите файл или <span style="color:#3182ce;" class="cursor-pointer">нажмите для выбора</span></p>
+          <p class="text-xs mt-1" style="color:rgba(160,184,216,0.5);">.xlsx, .csv, .pdf — до 10 MB</p>
+        </div>
+      </div>
+      <button
+        class="cta-btn cursor-pointer w-full py-3.5 rounded-xl text-white font-heading font-700 text-sm"
+        style="background:#3182ce; font-weight:700;"
+        onclick="this.textContent='Отправляем...'; setTimeout(()=>{this.textContent='✓ Запрос отправлен! Свяжемся в течение 2 часов'; this.style.background='#276749';}, 1500);"
+      >
+        Протестировать AI-импорт сметы
+      </button>
+      <p class="text-xs text-center mt-3" style="color:rgba(160,184,216,0.5);">
+        Нажимая кнопку, вы соглашаетесь на обработку персональных данных
+      </p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════ FOOTER -->
+<footer class="py-8 border-t" style="background:#0a1628; border-color:rgba(255,255,255,0.06);">
+  <div class="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+    <div class="flex items-center gap-2">
+      <div class="w-6 h-6 rounded-md flex items-center justify-center" style="background:#1a365d;">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      </div>
+      <span class="text-xs font-semibold" style="color:#7ab8f5;">СтройУправление</span>
+      <span class="text-xs" style="color:rgba(160,184,216,0.4);">· AI-Powered ERP · Кипр, ЕС</span>
+    </div>
+    <p class="text-xs" style="color:rgba(160,184,216,0.4);">© 2026 СтройУправление. Все права защищены.</p>
+  </div>
+</footer>
+
+<script>
+  /* Smooth scroll for anchor links */
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+    });
+  });
+
+  /* Drop zone highlight */
+  document.querySelectorAll('.drop-zone').forEach(zone => {
+    zone.addEventListener('dragover', e => { e.preventDefault(); zone.style.borderColor = '#3182ce'; });
+    zone.addEventListener('dragleave', () => { zone.style.borderColor = ''; });
+    zone.addEventListener('drop', e => { e.preventDefault(); zone.style.borderColor = '#38a169'; });
+  });
+</script>
+
+</body>
+</html>
