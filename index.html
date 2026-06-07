@@ -788,6 +788,26 @@ nav {
   .steps-grid::before { display: none; }
   .hero-cta { flex-direction: column; align-items: flex-start; }
 }
+
+/* NAV PM BUTTON */
+.nav-pm-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 7px 16px;
+  background: rgba(200,241,53,0.1);
+  border: 1px solid rgba(200,241,53,0.3);
+  border-radius: 8px;
+  color: var(--lime);
+  font-size: 12px; font-weight: 700;
+  letter-spacing: 0.5px;
+  text-decoration: none;
+  transition: background 0.2s, border-color 0.2s;
+}
+.nav-pm-btn:hover {
+  background: rgba(200,241,53,0.18);
+  border-color: rgba(200,241,53,0.6);
+}
+.nav-pm-btn i { font-size: 14px; }
+@media (max-width: 960px) { .nav-pm-btn { display: none; } }
 </style>
 </head>
 <body>
@@ -834,6 +854,7 @@ nav {
     <a href="#faq">FAQ</a>
   </div>
   <div class="nav-contacts">
+    <a href="/PM" class="nav-pm-btn"><i class="ti ti-layout-kanban"></i> Для ПМ</a>
     <a href="https://t.me/+35795951176" target="_blank" class="nav-contact-btn" title="Telegram"><i class="ti ti-brand-telegram"></i></a>
     <a href="https://wa.me/35795951176" target="_blank" class="nav-contact-btn nav-contact-btn--wa" title="WhatsApp"><i class="ti ti-brand-whatsapp"></i></a>
   </div>
@@ -848,6 +869,7 @@ nav {
   <a href="#pricing" onclick="closeBurger()">Цены</a>
   <a href="#ai" onclick="closeBurger()">AI</a>
   <a href="#faq" onclick="closeBurger()">FAQ</a>
+  <a href="/PM" onclick="closeBurger()" style="color:var(--lime)">Для ПМ →</a>
   <a href="#" onclick="openModal();closeBurger();return false" style="color:var(--lime)">Записаться на демо →</a>
 </div>
 
