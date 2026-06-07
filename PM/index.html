@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>СтройУправление — AI-платформа управления строительством</title>
+  <base href="/PM/">
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -44,9 +45,9 @@
       *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
     }
 
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; overflow-x: hidden; }
 
-    body { font-family: 'Open Sans', sans-serif; background-color: #F8FAFC; color: #020617; }
+    body { font-family: 'Open Sans', sans-serif; background-color: #F8FAFC; color: #020617; overflow-x: hidden; }
 
     .font-heading { font-family: 'Poppins', sans-serif; }
 
@@ -158,6 +159,18 @@
     /* Touch-friendly tap targets */
     @media (max-width: 767px) {
       .feature-card, .security-card { transform: none !important; }
+
+      /* Gallery mobile: fixed height window, scroll inside */
+      #gallery-screens {
+        max-height: 260px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
+      }
+      #gallery-screens img {
+        width: 100%;
+        height: auto;
+      }
     }
   </style>
 </head>
