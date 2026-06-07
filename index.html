@@ -788,26 +788,6 @@ nav {
   .steps-grid::before { display: none; }
   .hero-cta { flex-direction: column; align-items: flex-start; }
 }
-
-/* NAV PM BUTTON */
-.nav-pm-btn {
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 7px 16px;
-  background: rgba(200,241,53,0.1);
-  border: 1px solid rgba(200,241,53,0.3);
-  border-radius: 8px;
-  color: var(--lime);
-  font-size: 12px; font-weight: 700;
-  letter-spacing: 0.5px;
-  text-decoration: none;
-  transition: background 0.2s, border-color 0.2s;
-}
-.nav-pm-btn:hover {
-  background: rgba(200,241,53,0.18);
-  border-color: rgba(200,241,53,0.6);
-}
-.nav-pm-btn i { font-size: 14px; }
-@media (max-width: 960px) { .nav-pm-btn { display: none; } }
 </style>
 </head>
 <body>
@@ -868,7 +848,6 @@ nav {
   <a href="#pricing" onclick="closeBurger()">Цены</a>
   <a href="#ai" onclick="closeBurger()">AI</a>
   <a href="#faq" onclick="closeBurger()">FAQ</a>
-  <a href="/PM" onclick="closeBurger()" style="color:var(--lime)">Для ПМ →</a>
   <a href="#" onclick="openModal();closeBurger();return false" style="color:var(--lime)">Записаться на демо →</a>
 </div>
 
@@ -886,7 +865,7 @@ nav {
     </h1>
     <p class="hero-sub">Два инструмента — кто работает и что строится. Всё под контролем, без Excel и мессенджеров.</p>
 <div class="hero-cta">
-      <a href="/PM" class="btn-primary"><i class="ti ti-layout-kanban"></i> Управление проектами</a>
+      <button class="btn-primary" onclick="openModal()"><i class="ti ti-calendar"></i> Записаться на демо</button>
       <a href="#pricing" class="btn-secondary"><i class="ti ti-tag"></i> Посмотреть цены</a>
     </div>
   </div>
@@ -1277,146 +1256,65 @@ nav {
 <!-- PRICING -->
 <section id="pricing">
   <div class="section-label">Инвестиции</div>
-  <h2 class="section-title reveal">Прозрачные цены.<br><span style="color:var(--lime)">Никаких скрытых платежей.</span></h2>
-  <p class="section-desc reveal">Выбери продукт и формат — получи точную цену. Оба продукта вместе всегда выгоднее суммы двух.</p>
-
-  <div class="pricing-controls">
-    <div class="pricing-toggle-group" id="productToggle">
-      <button class="ptog active" data-product="tm" onclick="setProd('tm')">
-        <i class="ti ti-clock"></i> Time Management
-      </button>
-      <button class="ptog" data-product="cm" onclick="setProd('cm')">
-        <i class="ti ti-building"></i> Construction Management
-      </button>
-      <button class="ptog ptog-both" data-product="both" onclick="setProd('both')">
-        <i class="ti ti-layers-intersect"></i> Оба продукта ★
-      </button>
-    </div>
-
-    <div class="deploy-toggle-wrap">
-      <span class="deploy-label active" id="labelCloud">Облако</span>
-      <label class="deploy-switch">
-        <input type="checkbox" id="deployToggle" onchange="setDeploy(this.checked)">
-        <span class="deploy-slider"></span>
-      </label>
-      <span class="deploy-label" id="labelInstall">Своя установка</span>
-    </div>
-  </div>
+  <h2 class="section-title reveal">Один платёж.<br><span style="color:var(--lime)">Данные остаются у вас.</span></h2>
+  <p class="section-desc reveal">Установка на ваш сервер — без подписок, без облака. Полный функционал PRO с первого дня.</p>
 
   <div class="pricing-cards">
-    <div class="price-card reveal">
-      <div class="price-plan">СТАРТ</div>
-      <div class="price-limit" id="lim-start">до 5 объектов</div>
-      <div class="price-main" id="price-start">€99/мес</div>
-      <div class="price-sub" id="psub-start"></div>
-      <div class="price-highlights" id="hl-start"></div>
-      <button class="price-btn" onclick="openModal()">Начать</button>
-    </div>
 
-    <div class="price-card price-card-featured reveal">
-      <div class="price-badge">★ Популярный</div>
-      <div class="price-plan">РОСТ</div>
-      <div class="price-limit" id="lim-growth">до 15 объектов</div>
-      <div class="price-main" id="price-growth">€199/мес</div>
-      <div class="price-sub" id="psub-growth"></div>
-      <div class="price-highlights" id="hl-growth"></div>
-      <button class="price-btn price-btn-featured" onclick="openModal()">Выбрать план</button>
-    </div>
-
+    <!-- Time Management PRO -->
     <div class="price-card reveal">
-      <div class="price-plan">PRO</div>
-      <div class="price-limit" id="lim-pro">без лимитов</div>
-      <div class="price-main" id="price-pro">€349/мес</div>
-      <div class="price-sub" id="psub-pro"></div>
-      <div class="price-highlights" id="hl-pro"></div>
+      <div class="price-plan"><i class="ti ti-clock" style="color:var(--lime)"></i> Time Management</div>
+      <div class="price-limit">без лимитов объектов</div>
+      <div class="price-main">€1 800</div>
+      <div class="price-sub">единовременно · установка ~3 дня</div>
+      <div class="price-highlights">
+        <div class="price-hl-item">QR check-in/out + геолокация</div>
+        <div class="price-hl-item">Расчёт зарплаты · Автотабель PDF</div>
+        <div class="price-hl-item">Google Sheets · Telegram отчёты</div>
+        <div class="price-hl-item">Геофенс-блокировка · открытый API</div>
+        <div class="price-hl-item">AI-ассистент · выделенный менеджер</div>
+      </div>
       <button class="price-btn" onclick="openModal()">Обсудить</button>
     </div>
+
+    <!-- Construction Management PRO (featured) -->
+    <div class="price-card price-card-featured reveal">
+      <div class="price-badge">🖥 Своя установка</div>
+      <div class="price-plan"><i class="ti ti-building" style="color:var(--lime)"></i> Construction Management</div>
+      <div class="price-limit">без лимитов проектов</div>
+      <div class="price-main">€3 000</div>
+      <div class="price-sub">единовременно · установка ~3 дня</div>
+      <div class="price-highlights">
+        <div class="price-hl-item">Диаграмма Ганта · бригады · задачи</div>
+        <div class="price-hl-item">Бюджет vs факт · кассовый поток</div>
+        <div class="price-hl-item">Google Sheets · PDF/Excel отчёты</div>
+        <div class="price-hl-item">AI-прогноз срывов · клиент. портал</div>
+        <div class="price-hl-item">Открытый API · выделенный менеджер</div>
+      </div>
+      <button class="price-btn price-btn-featured" onclick="openModal()">Обсудить</button>
+    </div>
+
+    <!-- Оба продукта PRO -->
+    <div class="price-card reveal">
+      <div class="price-plan"><i class="ti ti-layers-intersect" style="color:var(--lime)"></i> Оба продукта ★</div>
+      <div class="price-limit">без лимитов всего</div>
+      <div class="price-main">€4 000</div>
+      <div class="price-sub">единовременно · экономия €800</div>
+      <div class="price-highlights">
+        <div class="price-hl-item">Полный Time Management PRO</div>
+        <div class="price-hl-item">Полный Construction Management PRO</div>
+        <div class="price-hl-item">Рабочие + проекты в одном месте</div>
+        <div class="price-hl-item">AI-ассистент по обоим продуктам</div>
+        <div class="price-hl-item">Выделенный менеджер · полный API</div>
+      </div>
+      <button class="price-btn" onclick="openModal()">Обсудить</button>
+    </div>
+
   </div>
 
-  <div class="pricing-hint" id="pricingHint" style="display:none">
+  <div class="pricing-hint" style="display:flex">
     <i class="ti ti-info-circle"></i>
-    <span>Возьми «Оба продукта» и сэкономь <strong id="savingsAmount"></strong> на тарифе РОСТ по сравнению с двумя подписками</span>
-  </div>
-
-  <!-- MATRIX TOGGLES -->
-  <div id="toggle-tm" class="matrix-toggle" onclick="toggleMatrix('tm')">
-    <span><i class="ti ti-clock"></i>&nbsp; Полный функционал Time Management</span>
-    <i class="ti ti-chevron-down" id="icon-tm"></i>
-  </div>
-  <div class="feat-matrix" id="matrix-tm" style="display:none">
-    <div class="feat-matrix-title"><i class="ti ti-clock"></i> Time Management</div>
-    <table class="feat-table">
-      <thead>
-        <tr>
-          <th></th>
-          <th>СТАРТ</th>
-          <th class="col-feat">РОСТ</th>
-          <th>PRO</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="feat-group-row"><td colspan="4">Базовые</td></tr>
-        <tr><td>QR check-in/out</td><td class="feat-yes">✓</td><td class="feat-yes">✓</td><td class="feat-yes">✓</td></tr>
-        <tr><td>Геолокация при отметке</td><td class="feat-yes">✓</td><td class="feat-yes">✓</td><td class="feat-yes">✓</td></tr>
-        <tr><td>Telegram уведомления + мгновенные отчёты</td><td class="feat-yes">✓</td><td class="feat-yes">✓</td><td class="feat-yes">✓</td></tr>
-        <tr><td>Excel-выгрузка</td><td class="feat-yes">✓</td><td class="feat-yes">✓</td><td class="feat-yes">✓</td></tr>
-        <tr><td>Email-поддержка</td><td class="feat-yes">✓</td><td class="feat-yes">✓</td><td class="feat-yes">✓</td></tr>
-        <tr><td>Объектов</td><td class="feat-val">до 5</td><td class="feat-val">до 15</td><td class="feat-val">∞</td></tr>
-        <tr class="feat-group-row"><td colspan="4">Расширенные</td></tr>
-        <tr><td>Расчёт зарплаты</td><td class="feat-no">—</td><td class="feat-yes">✓</td><td class="feat-yes">✓</td></tr>
-        <tr><td>Автотабель PDF</td><td class="feat-no">—</td><td class="feat-yes">✓</td><td class="feat-yes">✓</td></tr>
-        <tr><td>Google Sheets синхронизация</td><td class="feat-no">—</td><td class="feat-yes">✓</td><td class="feat-yes">✓</td></tr>
-        <tr><td>История данных 12 мес</td><td class="feat-no">—</td><td class="feat-yes">✓</td><td class="feat-yes">✓</td></tr>
-        <tr><td>Приоритетная поддержка</td><td class="feat-no">—</td><td class="feat-yes">✓</td><td class="feat-yes">✓</td></tr>
-        <tr><td>AI-ассистент (10 готовых запросов)</td><td class="feat-no">—</td><td class="feat-yes">✓</td><td class="feat-yes">✓</td></tr>
-        <tr class="feat-group-row"><td colspan="4">PRO</td></tr>
-        <tr><td>Геофенс-блокировка</td><td class="feat-no">—</td><td class="feat-no">—</td><td class="feat-yes">✓</td></tr>
-        <tr><td>Безлимит сотрудников</td><td class="feat-no">—</td><td class="feat-no">—</td><td class="feat-yes">✓</td></tr>
-        <tr><td>Открытый API</td><td class="feat-no">—</td><td class="feat-no">—</td><td class="feat-yes">✓</td></tr>
-        <tr><td>Выделенный менеджер</td><td class="feat-no">—</td><td class="feat-no">—</td><td class="feat-yes">✓</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div id="toggle-cm" class="matrix-toggle" onclick="toggleMatrix('cm')">
-    <span><i class="ti ti-building"></i>&nbsp; Полный функционал Construction Management</span>
-    <i class="ti ti-chevron-down" id="icon-cm"></i>
-  </div>
-  <div class="feat-matrix" id="matrix-cm" style="display:none">
-    <div class="feat-matrix-title"><i class="ti ti-building"></i> Construction Management</div>
-    <table class="feat-table">
-      <thead>
-        <tr>
-          <th></th>
-          <th>СТАРТ</th>
-          <th class="col-feat">РОСТ</th>
-          <th>PRO</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="feat-group-row"><td colspan="4">Базовые</td></tr>
-        <tr><td>Диаграмма Ганта</td><td class="feat-yes">✓</td><td class="feat-yes">✓</td><td class="feat-yes">✓</td></tr>
-        <tr><td>Управление задачами</td><td class="feat-yes">✓</td><td class="feat-yes">✓</td><td class="feat-yes">✓</td></tr>
-        <tr><td>Контроль бригад</td><td class="feat-yes">✓</td><td class="feat-yes">✓</td><td class="feat-yes">✓</td></tr>
-        <tr><td>Автоуведомления о просрочках</td><td class="feat-yes">✓</td><td class="feat-yes">✓</td><td class="feat-yes">✓</td></tr>
-        <tr><td>Бюджет vs факт</td><td class="feat-yes">✓</td><td class="feat-yes">✓</td><td class="feat-yes">✓</td></tr>
-        <tr><td>PDF/Excel отчёты</td><td class="feat-yes">✓</td><td class="feat-yes">✓</td><td class="feat-yes">✓</td></tr>
-        <tr><td>Email-поддержка</td><td class="feat-yes">✓</td><td class="feat-yes">✓</td><td class="feat-yes">✓</td></tr>
-        <tr><td>Проектов</td><td class="feat-val">до 5</td><td class="feat-val">до 15</td><td class="feat-val">∞</td></tr>
-        <tr class="feat-group-row"><td colspan="4">Расширенные</td></tr>
-        <tr><td>Кросс-проектный календарь</td><td class="feat-no">—</td><td class="feat-yes">✓</td><td class="feat-yes">✓</td></tr>
-        <tr><td>Работа с файлами и документами</td><td class="feat-no">—</td><td class="feat-yes">✓</td><td class="feat-yes">✓</td></tr>
-        <tr><td>Кассовый поток</td><td class="feat-no">—</td><td class="feat-yes">✓</td><td class="feat-yes">✓</td></tr>
-        <tr><td>Google Sheets синхронизация</td><td class="feat-no">—</td><td class="feat-yes">✓</td><td class="feat-yes">✓</td></tr>
-        <tr><td>Приоритетная поддержка</td><td class="feat-no">—</td><td class="feat-yes">✓</td><td class="feat-yes">✓</td></tr>
-        <tr><td>AI-ассистент (10 готовых запросов)</td><td class="feat-no">—</td><td class="feat-yes">✓</td><td class="feat-yes">✓</td></tr>
-        <tr class="feat-group-row"><td colspan="4">PRO</td></tr>
-        <tr><td>Прогноз срыва сроков</td><td class="feat-no">—</td><td class="feat-no">—</td><td class="feat-yes">✓</td></tr>
-        <tr><td>Клиентский портал</td><td class="feat-no">—</td><td class="feat-no">—</td><td class="feat-yes">✓</td></tr>
-        <tr><td>Открытый API</td><td class="feat-no">—</td><td class="feat-no">—</td><td class="feat-yes">✓</td></tr>
-        <tr><td>Выделенный менеджер</td><td class="feat-no">—</td><td class="feat-no">—</td><td class="feat-yes">✓</td></tr>
-      </tbody>
-    </table>
+    <span>Данные хранятся только на вашем сервере · Настройка и обучение команды включены · Без ежемесячных платежей</span>
   </div>
 </section>
 
@@ -1424,7 +1322,7 @@ nav {
 
 <!-- AI ASSISTANT -->
 <section id="ai" style="background:var(--bg2)">
-  <div class="section-label">Эксклюзив пакета РОСТ</div>
+  <div class="section-label">Включено во все продукты</div>
   <h2 class="section-title reveal">Узнай всё о своих объектах<br><span style="color:var(--lime)">за 10 секунд</span></h2>
   <p class="section-desc reveal">Просто напиши вопрос. AI смотрит в твои данные и отвечает — не нужно заходить в систему и искать по вкладкам. Работает с телефона, пока едешь на объект.</p>
 
@@ -1548,7 +1446,7 @@ nav {
     </div>
     <div class="faq-item">
       <div class="faq-question" onclick="toggleFaq(this)">
-        Можно ли отменить подписку?
+        Что включено в установку?
         <i class="ti ti-chevron-down faq-chevron"></i>
       </div>
       <div class="faq-answer">
@@ -1561,7 +1459,7 @@ nav {
         <i class="ti ti-chevron-down faq-chevron"></i>
       </div>
       <div class="faq-answer">
-        <div class="faq-answer-inner">Зависит от формата. Облако: начать можно сразу после оплаты подписки — добавляете объекты и сотрудников сами или с нашей помощью, рабочие отмечаются в тот же день. Установка на ваш сервер: около 3 рабочих дней с учётом настройки, интеграций и тестирования.</div>
+        <div class="faq-answer-inner">Настройка, интеграции, тестирование — около 3 рабочих дней. Обучение команды и выделенный менеджер входят в стоимость. После запуска данные и система полностью у вас — без зависимости от нашего сервера.</div>
       </div>
     </div>
   </div>
