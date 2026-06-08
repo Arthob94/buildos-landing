@@ -76,6 +76,10 @@
 
     .security-card { transition: background-color 150ms ease, border-color 150ms ease; }
     .security-card:hover { background-color: #f0f4fa; border-color: #1a365d; }
+    .pm-lang-switch { display:flex; align-items:center; gap:2px; background:#f0f4fa; border:1px solid #e2e8f0; border-radius:8px; padding:3px; }
+    .pm-lang-btn { background:none; border:none; color:#94a3b8; font-size:12px; font-weight:700; cursor:pointer; padding:4px 9px; border-radius:5px; transition:all 0.18s; letter-spacing:0.5px; font-family:inherit; }
+    .pm-lang-btn.active { background:#fff; color:#1a365d; box-shadow:0 1px 3px rgba(0,0,0,0.08); }
+    .pm-lang-btn:hover:not(.active) { color:#334155; }
 
     .cta-btn {
       transition: background-color 150ms ease, transform 100ms ease, box-shadow 150ms ease;
@@ -194,10 +198,14 @@
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
       ← BuildOS
     </a>
-    <a href="#features"     onclick="closeMobileMenu()" class="cursor-pointer px-4 py-3.5 rounded-xl text-base font-semibold" style="color:#e2e8f0;">Возможности</a>
-    <a href="#screenshots"  onclick="closeMobileMenu()" class="cursor-pointer px-4 py-3.5 rounded-xl text-base font-semibold" style="color:#e2e8f0;">Скриншоты</a>
-    <a href="#integrations" onclick="closeMobileMenu()" class="cursor-pointer px-4 py-3.5 rounded-xl text-base font-semibold" style="color:#e2e8f0;">Интеграции</a>
-    <a href="#pricing"      onclick="closeMobileMenu()" class="cursor-pointer px-4 py-3.5 rounded-xl text-base font-semibold" style="color:#e2e8f0;">Цены</a>
+    <a href="#features"     id="pm-mob-features" onclick="closeMobileMenu()" class="cursor-pointer px-4 py-3.5 rounded-xl text-base font-semibold" style="color:#e2e8f0;">Возможности</a>
+    <a href="#screenshots"  id="pm-mob-screenshots" onclick="closeMobileMenu()" class="cursor-pointer px-4 py-3.5 rounded-xl text-base font-semibold" style="color:#e2e8f0;">Скриншоты</a>
+    <a href="#integrations" id="pm-mob-integrations" onclick="closeMobileMenu()" class="cursor-pointer px-4 py-3.5 rounded-xl text-base font-semibold" style="color:#e2e8f0;">Интеграции</a>
+    <a href="#pricing"      id="pm-mob-pricing" onclick="closeMobileMenu()" class="cursor-pointer px-4 py-3.5 rounded-xl text-base font-semibold" style="color:#e2e8f0;">Цены</a>
+    <div class="flex gap-2 px-4 pt-2">
+      <button class="pm-lang-btn active" data-lang="ru" onclick="setPMLang('ru');closeMobileMenu()" style="flex:1;background:rgba(255,255,255,0.1);color:#e2e8f0;border:1px solid rgba(255,255,255,0.15);border-radius:10px;padding:10px;">RU</button>
+      <button class="pm-lang-btn" data-lang="en" onclick="setPMLang('en');closeMobileMenu()" style="flex:1;background:rgba(255,255,255,0.1);color:#e2e8f0;border:1px solid rgba(255,255,255,0.15);border-radius:10px;padding:10px;">EN</button>
+    </div>
     <div class="mt-auto pt-6 flex flex-col gap-3">
       <div class="flex gap-3">
         <a href="https://wa.me/35795951176" target="_blank" class="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl font-semibold text-sm" style="background:rgba(37,211,102,0.15); color:#25d366;">
@@ -248,7 +256,11 @@
       <a href="https://t.me/+35795951176" target="_blank" class="hidden sm:flex w-9 h-9 items-center justify-center rounded-lg transition-colors duration-150" style="color:#29b6f6; background:rgba(41,182,246,0.08);" title="Telegram" onmouseover="this.style.background='rgba(41,182,246,0.18)'" onmouseout="this.style.background='rgba(41,182,246,0.08)'">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
       </a>
-      <a href="#contact" class="cta-btn cursor-pointer hidden sm:inline-flex items-center gap-2 text-white text-sm font-semibold px-4 py-2 rounded-lg" style="background:#3182ce;">
+      <div class="pm-lang-switch hidden sm:flex">
+        <button class="pm-lang-btn active" data-lang="ru" onclick="setPMLang('ru')">RU</button>
+        <button class="pm-lang-btn" data-lang="en" onclick="setPMLang('en')">EN</button>
+      </div>
+      <a href="#contact" id="pm-nav-cta" class="cta-btn cursor-pointer hidden sm:inline-flex items-center gap-2 text-white text-sm font-semibold px-4 py-2 rounded-lg" style="background:#3182ce;">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 10l-4 4l6 6l4-16l-18 7l4 2l2 6l3-4"/></svg>
         Записаться на демо
       </a>
@@ -1177,6 +1189,367 @@
       setTimeout(() => { btn.textContent = 'Записаться на демо'; btn.style.background = '#3182ce'; }, 3000);
     }
   }
+</script>
+
+<script>
+/* ═══════════════════════════════════════════════════════════
+   BUILDOS PM — LANGUAGE SWITCHER
+═══════════════════════════════════════════════════════════ */
+(function(){
+const T={
+ru:{
+  navFeatures:'Возможности', navScreenshots:'Скриншоты', navIntegrations:'Интеграции',
+  navPricing:'Цены', navBack:'← BuildOS',
+  bookDemo:'Записаться на демо',
+  eyebrow:'ERP-платформа нового поколения',
+  heroTitle:'Забудьте об Excel.<br/><span style="color:#3182ce;">Расписание объекта</span><br/>за&nbsp;10 секунд с&nbsp;AI.',
+  heroSub:'AI-платформа управления строительными проектами — диаграмма Ганта, финансы, бригады и аналитика в одном месте. Запишитесь на демо — покажем вживую за 20 минут.',
+  heroCta:'Записаться на демо', heroFeatures:'Смотреть возможности',
+  stat1n:'до 15', stat1l:'объектов<br/>одновременно',
+  stat2n:'10 сек', stat2l:'импорт сметы<br/>в диаграмму Ганта',
+  stat3n:'130+', stat3l:'интеграционных<br/>тестов',
+  stat4n:'0%', stat4l:'перерасхода<br/>по актам',
+  demoCardLabel:'Что покажем на демо',
+  demoItems:['Диаграмму Ганта по вашему типу объекта','Контроль бюджета и финансовый дашборд','Календарь бригад и расписание объектов','AI-ассистент для аналитики и отчётов'],
+  demoDuration:'Длительность: 20 минут · онлайн',
+  probTag:'Проблема', probTitle:'Узнаёте себя?',
+  probDesc:'Три боли, из-за которых строительные компании теряют деньги и нервы каждый день',
+  prob1Title:'Хаос устных договорённостей',
+  prob1Desc:'Прораб сказал одно — бригада услышала другое. Задачи в мессенджерах, Excel-таблицы у каждого свои. Кто что сделал — никто не знает.',
+  prob2Title:'Воровство и ошибки в актах',
+  prob2Desc:'В актах закрывают объёмы выше плановых или цены выше договорных. Заметить это вручную — почти невозможно. Деньги утекают незаметно.',
+  prob3Title:'Накладки бригад между объектами',
+  prob3Desc:'Одна бригада одновременно «назначена» на два объекта. Срывы сроков, штрафы, конфликты с заказчиками — всё из-за отсутствия единого календаря.',
+  aiTag:'AI-возможности',
+  aiTitle:'Революционный AI в строительстве',
+  aiDesc:'Два прорывных инструмента, которые меняют способ управления объектами навсегда',
+  aiImportTag:'Мгновенный', aiImportTitle:'AI-импорт сметы',
+  aiImportDesc:'Загрузите обычную Excel-смету — и за&nbsp;10 секунд платформа создаёт полноценную интерактивную диаграмму Ганта. Вам остаётся только назначить исполнителей. Никакого ручного ввода, никаких ошибок переноса.',
+  aiImportStep1:'Загружаете Excel или вставляете текст сметы',
+  aiImportStep2:'AI парсит этапы, объёмы, сроки и материалы',
+  aiImportStep3:'Диаграмма Ганта готова — назначайте бригады',
+  aiAdaptTag:'Claude API / MCP', aiAdaptTitle:'AI-адаптивный интерфейс',
+  aiAdaptDesc:'Управляйте ERP простыми текстовыми командами — без поиска по меню и обучения сотрудников. Интеграция с Claude API через MCP делает аналитику мгновенной.',
+  galleryTag:'Живой интерфейс', galleryTitle:'Платформа в действии',
+  galleryDesc:'Реальные экраны системы — без маркетинговых mockup-ов',
+  galleryTabs:['Проекты','Диаграмма Ганта','Финансы','Отчёты и аналитика','Календарь бригад'],
+  integTag:'Интеграции', integTitle:'Работает с вашей экосистемой',
+  integDesc:'Подключается к инструментам, которые уже используют ваши команды — без смены процессов и переобучения',
+  prTag:'Инвестиция',
+  prTitle:'Один платёж.<br/>Ваши данные — на вашем сервере.',
+  prDesc:'Полный функционал Construction Management PRO — без подписок и облаков',
+  prBadge:'🖥 Установка на ваш сервер',
+  prPlan:'Construction Management PRO',
+  prLimit:'без лимитов проектов и пользователей',
+  prPrice:'€3 000', prSub:'единовременно · настройка ~3 рабочих дня',
+  prFeatures:['Диаграмма Ганта','Управление задачами и бригадами','Бюджет vs факт · Кассовый поток','PDF/Excel отчёты · Google Sheets','AI-прогноз срыва сроков','Клиентский портал','Открытый API · Выделенный менеджер','Данные остаются на вашем сервере'],
+  prCta:'Записаться на демо',
+  prNote:'Разовая оплата · Без подписок · Данные только у вас',
+  devLabel:'О создателе платформы',
+  devDesc:'Бизнес-эксперт и консультант по оптимизации операционных процессов и внедрению AI-решений. Опыт в управлении внедрением платформ автоматизации в компаниях — от аудита процессов до запуска и обучения команд.',
+  devLinkedIn:'LinkedIn профиль',
+  ctaEyebrow:'Запишитесь прямо сейчас',
+  ctaTitle:'Живое демо за 20 минут.<br/><span style="color:#3182ce;">Покажем на реальных примерах.</span>',
+  ctaDesc:'Мы проведём персональную демонстрацию платформы — покажем диаграмму Ганта, финансовый контроль и AI-ассистента на примерах, близких к вашему бизнесу. Без обязательств — просто оставьте контакты.',
+  formName:'Ваше имя', formPhone:'Телефон', formCompany:'Компания',
+  formPhPh:'Александр Петров', formPhPhone:'+357 96 123 456', formPhComp:'СК «Стройпром»',
+  formBtn:'Записаться на демо',
+  formConsent:'Нажимая кнопку, вы соглашаетесь на обработку персональных данных',
+  formOr:'или напишите напрямую',
+  footerBack:'Вернуться на BuildOS',
+  footerCopy:'© 2026 СтройУправление. Все права защищены.',
+  footerSub:'· AI-Powered ERP · Кипр, ЕС',
+  sending:'Отправляем...', sent:'✓ Заявка принята! Свяжемся в течение 2 часов',
+  errSend:'Ошибка отправки — попробуйте ещё раз',
+  alertName:'Пожалуйста, введите имя.', alertPhone:'Пожалуйста, введите телефон.'
+},
+en:{
+  navFeatures:'Features', navScreenshots:'Screenshots', navIntegrations:'Integrations',
+  navPricing:'Pricing', navBack:'← BuildOS',
+  bookDemo:'Book a Demo',
+  eyebrow:'Next-generation ERP platform',
+  heroTitle:'Forget Excel.<br/><span style="color:#3182ce;">Site schedule</span><br/>in&nbsp;10 seconds with&nbsp;AI.',
+  heroSub:'AI platform for construction project management — Gantt charts, finances, crews and analytics in one place. Book a demo — we\'ll show you live in 20 minutes.',
+  heroCta:'Book a Demo', heroFeatures:'View features',
+  stat1n:'up to 15', stat1l:'sites<br/>simultaneously',
+  stat2n:'10 sec', stat2l:'estimate import<br/>to Gantt chart',
+  stat3n:'130+', stat3l:'integration<br/>tests',
+  stat4n:'0%', stat4l:'cost overrun<br/>on acts',
+  demoCardLabel:"What we'll show on the demo",
+  demoItems:['Gantt chart for your type of project','Budget control and financial dashboard','Crew calendar and site scheduling','AI assistant for analytics and reports'],
+  demoDuration:'Duration: 20 minutes · online',
+  probTag:'Problem', probTitle:'Sound familiar?',
+  probDesc:'Three pain points that cost construction companies money and nerves every day',
+  prob1Title:'Chaos of verbal agreements',
+  prob1Desc:"The foreman said one thing — the crew heard another. Tasks in messengers, everyone has their own Excel. Who did what — nobody knows.",
+  prob2Title:'Theft and errors in acts',
+  prob2Desc:'Acts are closed with volumes above plan or prices above contract. Spotting this manually is nearly impossible. Money leaks silently.',
+  prob3Title:'Crew conflicts between sites',
+  prob3Desc:"One crew is simultaneously 'assigned' to two sites. Missed deadlines, penalties, conflicts with clients — all due to the lack of a unified calendar.",
+  aiTag:'AI capabilities',
+  aiTitle:'Revolutionary AI in construction',
+  aiDesc:'Two breakthrough tools that change the way sites are managed forever',
+  aiImportTag:'Instant', aiImportTitle:'AI estimate import',
+  aiImportDesc:'Upload a standard Excel estimate — and in 10 seconds the platform creates a fully interactive Gantt chart. All you need to do is assign crews. No manual entry, no transfer errors.',
+  aiImportStep1:'Upload Excel or paste the estimate text',
+  aiImportStep2:'AI parses phases, volumes, timelines and materials',
+  aiImportStep3:'Gantt chart is ready — assign crews',
+  aiAdaptTag:'Claude API / MCP', aiAdaptTitle:'AI-adaptive interface',
+  aiAdaptDesc:'Manage the ERP with simple text commands — no menu navigation, no employee training required. Claude API integration via MCP makes analytics instant.',
+  galleryTag:'Live interface', galleryTitle:'Platform in action',
+  galleryDesc:'Real system screens — no marketing mockups',
+  galleryTabs:['Projects','Gantt chart','Finances','Reports & analytics','Crew calendar'],
+  integTag:'Integrations', integTitle:'Works with your ecosystem',
+  integDesc:'Connects to the tools your teams already use — no process changes, no retraining',
+  prTag:'Investment',
+  prTitle:'One payment.<br/>Your data — on your server.',
+  prDesc:'Full Construction Management PRO functionality — no subscriptions, no cloud',
+  prBadge:'🖥 Self-hosted installation',
+  prPlan:'Construction Management PRO',
+  prLimit:'unlimited projects and users',
+  prPrice:'€3,000', prSub:'one-time · setup ~3 business days',
+  prFeatures:['Gantt chart','Task and crew management','Budget vs actuals · Cash flow','PDF/Excel reports · Google Sheets','AI deadline forecast','Client portal','Open API · Dedicated manager','Data stays on your server'],
+  prCta:'Book a Demo',
+  prNote:'One-time payment · No subscriptions · Data only with you',
+  devLabel:'About the platform creator',
+  devDesc:'Business expert and consultant in operational process optimization and AI solution implementation. Experience in managing automation platform rollouts — from process audits to launch and team training.',
+  devLinkedIn:'LinkedIn profile',
+  ctaEyebrow:'Book your slot now',
+  ctaTitle:'Live demo in 20 minutes.<br/><span style="color:#3182ce;">Shown on real examples.</span>',
+  ctaDesc:"We'll run a personal platform demonstration — showing the Gantt chart, financial control and AI assistant with examples close to your business. No obligations — just leave your contact details.",
+  formName:'Your name', formPhone:'Phone', formCompany:'Company',
+  formPhPh:'Alexander Petrov', formPhPhone:'+357 96 123 456', formPhComp:'ABC Construction Ltd',
+  formBtn:'Book a Demo',
+  formConsent:'By clicking the button, you agree to the processing of your personal data',
+  formOr:'or write directly',
+  footerBack:'Back to BuildOS',
+  footerCopy:'© 2026 СтройУправление. All rights reserved.',
+  footerSub:'· AI-Powered ERP · Cyprus, EU',
+  sending:'Sending...', sent:'✓ Request received! We\'ll be in touch within 2 hours',
+  errSend:'Sending failed — please try again',
+  alertName:'Please enter your name.', alertPhone:'Please enter your phone number.'
+}
+};
+
+function applyPMLang(lang){
+  const t=T[lang];
+  window._pmLang=lang;
+  window._pmLangT=t;
+  localStorage.setItem('buildos_lang',lang);
+  document.documentElement.lang=lang==='en'?'en':'ru';
+
+  /* switcher */
+  document.querySelectorAll('.pm-lang-btn').forEach(b=>b.classList.toggle('active',b.dataset.lang===lang));
+
+  /* desktop nav */
+  const navLinks=document.querySelectorAll('#pm-header nav.hidden a');
+  if(navLinks[0])navLinks[0].textContent=t.navFeatures;
+  if(navLinks[1])navLinks[1].textContent=t.navScreenshots;
+  if(navLinks[2])navLinks[2].textContent=t.navIntegrations;
+  if(navLinks[3])navLinks[3].textContent=t.navPricing;
+  if(navLinks[4])navLinks[4].textContent=t.navBack;
+
+  /* mobile nav */
+  const mf=document.getElementById('pm-mob-features');if(mf)mf.textContent=t.navFeatures;
+  const ms=document.getElementById('pm-mob-screenshots');if(ms)ms.textContent=t.navScreenshots;
+  const mi=document.getElementById('pm-mob-integrations');if(mi)mi.textContent=t.navIntegrations;
+  const mp=document.getElementById('pm-mob-pricing');if(mp)mp.textContent=t.navPricing;
+
+  /* nav CTA */
+  const navCta=document.getElementById('pm-nav-cta');
+  if(navCta){const svg=navCta.querySelector('svg');navCta.textContent=t.bookDemo;if(svg)navCta.prepend(svg);}
+
+  /* hero */
+  const eyebrow=document.querySelector('.hero-bg [style*="tracking-widest"]');
+  if(eyebrow){const svg=eyebrow.querySelector('svg');eyebrow.lastChild&&(eyebrow.lastChild.textContent=' '+t.eyebrow);if(svg&&!eyebrow.contains(svg))eyebrow.prepend(svg);}
+  const heroH1=document.querySelector('.hero-bg h1');
+  if(heroH1)heroH1.innerHTML=t.heroTitle;
+  const heroP=document.querySelector('.hero-bg>div>div>p');
+  if(heroP)heroP.textContent=t.heroSub;
+
+  /* hero CTAs */
+  const ctaBtns=document.querySelectorAll('.hero-bg .flex.flex-col a');
+  ctaBtns.forEach(btn=>{
+    const svg=btn.querySelector('svg');
+    if(btn.href&&btn.href.includes('#contact')){btn.textContent=t.heroCta;if(svg)btn.prepend(svg);}
+    else if(btn.href&&btn.href.includes('#features')){
+      const arrow=btn.querySelector('svg:last-child');
+      btn.textContent=t.heroFeatures;
+      if(arrow)btn.appendChild(arrow);
+    }
+  });
+
+  /* hero stats */
+  const statCards=document.querySelectorAll('.hero-bg .stat-card');
+  if(statCards[0]){
+    const n=statCards[0].querySelector('[style*="color:#3182ce"]');if(n)n.textContent=t.stat1n;
+    const l=statCards[0].querySelector('[style*="color:#7ab8f5"]');if(l)l.innerHTML=t.stat1l;
+  }
+  if(statCards[1]){
+    const n=statCards[1].querySelector('[style*="color:#3182ce"]');if(n)n.textContent=t.stat2n;
+    const l=statCards[1].querySelector('[style*="color:#7ab8f5"]');if(l)l.innerHTML=t.stat2l;
+  }
+  if(statCards[2]){
+    const n=statCards[2].querySelector('[style*="color:#3182ce"]');if(n)n.textContent=t.stat3n;
+    const l=statCards[2].querySelector('[style*="color:#7ab8f5"]');if(l)l.innerHTML=t.stat3l;
+  }
+  if(statCards[3]){
+    const n=statCards[3].querySelector('[style*="color:#3182ce"]');if(n)n.textContent=t.stat4n;
+    const l=statCards[3].querySelector('[style*="color:#7ab8f5"]');if(l)l.innerHTML=t.stat4l;
+  }
+
+  /* demo preview card */
+  const demoCard=document.querySelector('.hero-bg .rounded-2xl p');
+  if(demoCard)demoCard.textContent=t.demoCardLabel;
+  const demoItems=document.querySelectorAll('.hero-bg .space-y-3 span[style*="color:#e2e8f0"]');
+  demoItems.forEach((el,i)=>{if(t.demoItems[i])el.textContent=t.demoItems[i];});
+  const demoDur=document.querySelector('.hero-bg [style*="color:rgba(160,184,216,0.7)"]');
+  if(demoDur){const svg=demoDur.querySelector('svg');demoDur.textContent=t.demoDuration;if(svg)demoDur.prepend(svg);}
+
+  /* problems */
+  const prob=document.querySelector('.bg-white.py-12, .py-12.sm\\:py-16.bg-white');
+  if(prob){
+    const tag=prob.querySelector('.tag');if(tag)tag.textContent=t.probTag;
+    const ttl=prob.querySelector('h2');if(ttl)ttl.textContent=t.probTitle;
+    const dsc=prob.querySelector('p[style*="color:#64748b"]');if(dsc)dsc.textContent=t.probDesc;
+    const cards=prob.querySelectorAll('.feature-card');
+    if(cards[0]){const h=cards[0].querySelector('h3');if(h)h.textContent=t.prob1Title;const p=cards[0].querySelector('p');if(p)p.textContent=t.prob1Desc;}
+    if(cards[1]){const h=cards[1].querySelector('h3');if(h)h.textContent=t.prob2Title;const p=cards[1].querySelector('p');if(p)p.textContent=t.prob2Desc;}
+    if(cards[2]){const h=cards[2].querySelector('h3');if(h)h.textContent=t.prob3Title;const p=cards[2].querySelector('p');if(p)p.textContent=t.prob3Desc;}
+  }
+
+  /* AI features */
+  const aiSec=document.getElementById('features');
+  if(aiSec){
+    const tag=aiSec.querySelector('.tag');if(tag)tag.textContent=t.aiTag;
+    const ttl=aiSec.querySelector('h2');if(ttl)ttl.textContent=t.aiTitle;
+    const dsc=aiSec.querySelector('p[style*="color:#64748b"]');if(dsc)dsc.textContent=t.aiDesc;
+    /* import card */
+    const cards=aiSec.querySelectorAll('.feature-card');
+    if(cards[0]){
+      const importTag=cards[0].querySelector('.tag');if(importTag)importTag.textContent=t.aiImportTag;
+      const h3=cards[0].querySelector('h3');if(h3)h3.textContent=t.aiImportTitle;
+      const p=cards[0].querySelector('p[style*="color:#475569"]');if(p)p.innerHTML=t.aiImportDesc;
+      const steps=cards[0].querySelectorAll('span[style*="color:#334155"]');
+      if(steps[0])steps[0].textContent=t.aiImportStep1;
+      if(steps[1])steps[1].textContent=t.aiImportStep2;
+      if(steps[2])steps[2].textContent=t.aiImportStep3;
+    }
+    if(cards[1]){
+      const adaptTag=cards[1].querySelector('.tag');if(adaptTag)adaptTag.textContent=t.aiAdaptTag;
+      const h3=cards[1].querySelector('h3');if(h3)h3.textContent=t.aiAdaptTitle;
+      const p=cards[1].querySelector('p[style*="color:#475569"]');if(p)p.textContent=t.aiAdaptDesc;
+    }
+  }
+
+  /* screenshots gallery */
+  const gallery=document.getElementById('screenshots');
+  if(gallery){
+    const tag=gallery.querySelector('.tag');if(tag)tag.textContent=t.galleryTag;
+    const ttl=gallery.querySelector('h2');if(ttl)ttl.textContent=t.galleryTitle;
+    const dsc=gallery.querySelector('p[style*="color:#64748b"]');if(dsc)dsc.textContent=t.galleryDesc;
+    const tabs=gallery.querySelectorAll('.gallery-tab');
+    tabs.forEach((tab,i)=>{if(t.galleryTabs[i])tab.textContent=t.galleryTabs[i];});
+    /* update screenLabels for JS counter */
+    if(window.screenLabels)window.screenLabels.splice(0,5,...t.galleryTabs);
+  }
+
+  /* integrations */
+  const integ=document.getElementById('integrations');
+  if(integ){
+    const tag=integ.querySelector('.tag');if(tag)tag.textContent=t.integTag;
+    const ttl=integ.querySelector('h2');if(ttl)ttl.textContent=t.integTitle;
+    const dsc=integ.querySelector('p[style*="color:#64748b"]');if(dsc)dsc.textContent=t.integDesc;
+  }
+
+  /* pricing */
+  const pr=document.getElementById('pricing');
+  if(pr){
+    const tag=pr.querySelector('.tag');if(tag)tag.textContent=t.prTag;
+    const ttl=pr.querySelector('h2');if(ttl)ttl.innerHTML=t.prTitle;
+    const dsc=pr.querySelector('p[style*="color:#64748b"]');if(dsc)dsc.textContent=t.prDesc;
+    const badge=pr.querySelector('[style*="background:#3182ce"]');
+    if(badge&&badge.tagName!=='A'&&badge.tagName!=='BUTTON')badge.textContent=t.prBadge;
+    const planEl=pr.querySelector('[style*="color:#3182ce;font-weight:700"]');if(planEl)planEl.textContent=t.prPlan;
+    const limitEl=pr.querySelector('[style*="color:#94a3b8"]');if(limitEl)limitEl.textContent=t.prLimit;
+    const priceEl=pr.querySelector('.text-5xl');if(priceEl)priceEl.textContent=t.prPrice;
+    const subEl=pr.querySelector('[style*="color:#64748b"]:not(p)');
+    const allColGray=pr.querySelectorAll('[style*="color:#64748b"]');
+    allColGray.forEach(el=>{if(el.tagName==='DIV'&&el.textContent.includes('единовременно')||el.textContent.includes('one-time'))el.textContent=t.prSub;});
+    /* feature list */
+    const lis=pr.querySelectorAll('li');
+    lis.forEach((li,i)=>{
+      if(t.prFeatures[i]){
+        const svg=li.querySelector('svg');
+        li.textContent=t.prFeatures[i];
+        if(svg)li.prepend(svg);
+      }
+    });
+    const ctaBtn=pr.querySelector('a.cta-btn');if(ctaBtn)ctaBtn.textContent=t.prCta;
+    const note=pr.querySelector('p.text-center.text-xs');if(note)note.textContent=t.prNote;
+  }
+
+  /* developer */
+  const dev=document.querySelector('[style*="background:#F8FAFC"]');
+  if(dev){
+    const lbl=dev.querySelector('[style*="color:#94a3b8"]');if(lbl)lbl.textContent=t.devLabel;
+    const p=dev.querySelector('p[style*="color:#64748b"]');if(p)p.textContent=t.devDesc;
+    const lnk=dev.querySelector('a[href*="linkedin"]');if(lnk){const svg=lnk.querySelector('svg');lnk.textContent=t.devLinkedIn;if(svg)lnk.prepend(svg);}
+  }
+
+  /* contact CTA */
+  const cta=document.getElementById('contact');
+  if(cta){
+    const ey=cta.querySelector('p[style*="color:#7ab8f5"]');if(ey)ey.textContent=t.ctaEyebrow;
+    const ttl=cta.querySelector('h2');if(ttl)ttl.innerHTML=t.ctaTitle;
+    const dsc=cta.querySelector('p[style*="color:#a0b8d8"]');if(dsc)dsc.textContent=t.ctaDesc;
+    const nameLabel=cta.querySelector('label[for="lead-name"]');if(nameLabel)nameLabel.textContent=t.formName;
+    const phoneLabel=cta.querySelector('label[for="lead-phone"]');if(phoneLabel)phoneLabel.textContent=t.formPhone;
+    const compLabel=cta.querySelector('label[for="lead-company"]');if(compLabel)compLabel.textContent=t.formCompany;
+    const nameInput=cta.querySelector('#lead-name');if(nameInput)nameInput.placeholder=t.formPhPh;
+    const phoneInput=cta.querySelector('#lead-phone');if(phoneInput)phoneInput.placeholder=t.formPhPhone;
+    const compInput=cta.querySelector('#lead-company');if(compInput)compInput.placeholder=t.formPhComp;
+    const btn=document.getElementById('pm-submit-btn');if(btn&&!btn.disabled)btn.textContent=t.formBtn;
+    const consent=cta.querySelector('p.text-xs.text-center');if(consent)consent.textContent=t.formConsent;
+    const orText=cta.querySelector('[style*="color:rgba(160,184,216,0.6)"]');if(orText)orText.textContent=t.formOr;
+  }
+
+  /* footer */
+  const footer=document.querySelector('footer .text-xs[style*="color:rgba(160,184,216,0.4)"]:last-child');
+  if(footer){const a=footer.querySelector('a');if(a){const svg=a.querySelector('svg');a.textContent=t.footerBack;if(svg)a.prepend(svg);}}
+  const footerCopy=document.querySelector('footer p.text-xs');if(footerCopy)footerCopy.textContent=t.footerCopy;
+  const footerSub=document.querySelector('footer span[style*="color:rgba(160,184,216,0.4)"]');if(footerSub)footerSub.textContent=t.footerSub;
+}
+
+window.setPMLang=applyPMLang;
+
+/* patch submitPMLead */
+const _origSubmitPM=window.submitPMLead;
+window.submitPMLead=async function(){
+  const t=window._pmLangT||T.ru;
+  const name=document.getElementById('lead-name').value.trim();
+  const contact=document.getElementById('lead-phone').value.trim();
+  const company=document.getElementById('lead-company').value.trim();
+  if(!name){document.getElementById('lead-name').focus();alert(t.alertName);return;}
+  if(!contact){document.getElementById('lead-phone').focus();alert(t.alertPhone);return;}
+  const btn=document.getElementById('pm-submit-btn');
+  btn.textContent=t.sending;btn.disabled=true;
+  const text='🏗 Новая заявка на демо — BuildOS PM\n\n👤 Имя: '+name+'\n📞 Контакт: '+contact+(company?'\n🏢 Компания: '+company:'')+'\n\n⏰ '+new Date().toLocaleString('ru-RU',{timeZone:'Europe/Moscow'});
+  try{
+    const res=await fetch('https://api.telegram.org/bot8728272597:AAFu2uQjVEVGrtbFMSpjI4r5OOpJwULncaQ/sendMessage',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:7398422197,text})});
+    if(!res.ok)throw new Error('HTTP '+res.status);
+    btn.textContent=t.sent;btn.style.background='#276749';
+    ['lead-name','lead-phone','lead-company'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  }catch(e){
+    btn.textContent=t.errSend;btn.style.background='#c53030';btn.disabled=false;
+    setTimeout(()=>{btn.textContent=t.formBtn;btn.style.background='#3182ce';},3000);
+  }
+};
+
+/* init — share lang preference across both pages */
+const saved=localStorage.getItem('buildos_lang')||'ru';
+applyPMLang(saved);
+})();
 </script>
 
 </body>

@@ -490,6 +490,10 @@ footer {
 .nav-contact-btn { display: flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 9px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: var(--muted); font-size: 18px; text-decoration: none; transition: all 0.2s; }
 .nav-contact-btn:hover { background: rgba(41,182,246,0.15); border-color: #29b6f6; color: #29b6f6; }
 .nav-contact-btn--wa:hover { background: rgba(37,211,102,0.15); border-color: #25d366; color: #25d366; }
+.lang-switch { display:flex; align-items:center; gap:2px; background:rgba(255,255,255,0.05); border:1px solid var(--border); border-radius:8px; padding:3px; }
+.lang-btn { background:none; border:none; color:var(--muted); font-family:var(--font-body); font-size:12px; font-weight:700; cursor:pointer; padding:4px 9px; border-radius:5px; transition:all 0.18s; letter-spacing:0.5px; }
+.lang-btn.active { background:rgba(255,255,255,0.12); color:var(--text); }
+.lang-btn:hover:not(.active) { color:var(--text); }
 
 /* UTILS */
 .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.7s, transform 0.7s; }
@@ -834,9 +838,13 @@ nav {
     <a href="#faq">FAQ</a>
   </div>
   <div class="nav-contacts">
+    <div class="lang-switch">
+      <button class="lang-btn active" data-lang="ru" onclick="setLang('ru')">RU</button>
+      <button class="lang-btn" data-lang="en" onclick="setLang('en')">EN</button>
+    </div>
     <a href="https://t.me/+35795951176" target="_blank" class="nav-contact-btn" title="Telegram"><i class="ti ti-brand-telegram"></i></a>
     <a href="https://wa.me/35795951176" target="_blank" class="nav-contact-btn nav-contact-btn--wa" title="WhatsApp"><i class="ti ti-brand-whatsapp"></i></a>
-    <button class="btn-primary" onclick="openModal()" style="padding:10px 22px;font-size:13px;">Записаться на демо</button>
+    <button class="btn-primary" id="nav-cta-btn" onclick="openModal()" style="padding:10px 22px;font-size:13px;">Записаться на демо</button>
   </div>
   <button class="burger-btn" id="burgerBtn" onclick="toggleBurger()" aria-label="Меню">
     <span></span><span></span><span></span>
@@ -849,7 +857,11 @@ nav {
   <a href="#pricing" onclick="closeBurger()">Цены</a>
   <a href="#ai" onclick="closeBurger()">AI</a>
   <a href="#faq" onclick="closeBurger()">FAQ</a>
-  <a href="#" onclick="openModal();closeBurger();return false" style="color:var(--lime)">Записаться на демо →</a>
+  <a href="#" id="mob-demo-link" onclick="openModal();closeBurger();return false" style="color:var(--lime)">Записаться на демо →</a>
+  <div style="display:flex;gap:6px;padding:8px 0 0;">
+    <button class="lang-btn" data-lang="ru" onclick="setLang('ru');closeBurger()" style="flex:1;background:rgba(255,255,255,0.08);color:var(--muted);border:1px solid var(--border);border-radius:8px;padding:8px;">RU</button>
+    <button class="lang-btn" data-lang="en" onclick="setLang('en');closeBurger()" style="flex:1;background:rgba(255,255,255,0.08);color:var(--muted);border:1px solid var(--border);border-radius:8px;padding:8px;">EN</button>
+  </div>
 </div>
 
 <!-- HERO -->
@@ -1811,6 +1823,491 @@ function toggleFaq(question) {
     <a href="https://wa.me/35795951176" target="_blank" class="bottom-bar-btn bottom-bar-btn--wa"><i class="ti ti-brand-whatsapp"></i> WhatsApp</a>
   </div>
 </div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════
+   BUILDOS — LANGUAGE SWITCHER
+═══════════════════════════════════════════════════════════ */
+(function(){
+const T={
+ru:{
+  navLinks:['Продукты','Отзывы','Цены','AI','FAQ'],
+  mobileLinks:['Продукты','Отзывы','Цены','AI','FAQ'],
+  bookDemo:'Записаться на демо', bookDemoArrow:'Записаться на демо →',
+  pmBtn:'<i class="ti ti-building"></i> Модуль для ПМ →',
+  heroTitle:'НЕ ЗАНИМАЙСЯ<br><span style="text-decoration:line-through">ФИГНЁЙ...</span><br><span class="accent">УПРАВЛЯЙ</span><br><span class="accent">ПРОЦЕССОМ!</span>',
+  heroSub:'Два инструмента — кто работает и что строится. Всё под контролем, без Excel и мессенджеров.',
+  heroTag:'Софт для строительных компаний',
+  tmCardSub:'Сегодня · Объект «Кипарисы»',
+  tmStat1:'На объекте сейчас', tmStat2:'Отработано сегодня', tmStat3:'К выплате',
+  tmNotif:'<i class="ti ti-brand-telegram"></i> Уведомления включены',
+  cmCardSub:'Проект · «Офис Никосия»',
+  ganttMini:['Фундамент','Каркас','Кровля','Отделка'],
+  cmStat1:'Готовность проекта', cmStat2:'Бюджет факт / план', cmStat3:'Активных задач',
+  cmOverdue:'<i class="ti ti-bell"></i> 2 просрочки · нужно внимание', cmToday:'сегодня',
+  tmMockupTitle:'Time Management — «Лимассол Вилла»',
+  mStat1:'На объекте', mStat2:'Часов сегодня', mStat3:'К выплате',
+  workerStatuses:['На объекте','На объекте','Завершил','На объекте','Завершил'],
+  cmMockupTitle:'Construction Management — «Офис Никосия»',
+  ganttMonths:['МАЙ','ИЮН','ИЮЛ','АВГ'],
+  ganttLabels:['Фундамент','Каркас','Кровля','Отделка','Сдача'],
+  cmStat4:'Готовность', cmStat5:'Факт / €190k',
+  painLabel:'Узнай себя',
+  painTitle:'Как это обычно<br>выглядит у тебя',
+  painTitles:['Табель в тетрадке','WhatsApp — твоя CRM','Деньги ушли — непонятно куда','Срок сорван. Снова.'],
+  painTexts:['Рабочий говорит «я был 8 часов», ты говоришь «нет, 6». Скандал. Каждый месяц. Один и тот же.','Статус объекта — у прораба в голове. Ты звонишь, он не берёт. Клиент уже пишет.','Бюджет в Excel. Факт в голове бухгалтера. Сходятся раз в год. Уже поздно.','Бригада занята на другом объекте — ты узнаёшь от злого клиента, а не от системы.'],
+  p1Label:'Инструмент 1', p1Desc:'Кто пришёл, сколько отработал, сколько получит — всё автоматически. Без тетрадей, без споров.',
+  p1FeatT:['QR-метка на объекте — и всё','Зарплата считается сама','Telegram сообщает раньше тебя','Геолокация при отметке','Отчёт — одной кнопкой'],
+  p1FeatD:['Рабочий открывает ссылку на телефоне, сканирует QR. Вход зафиксирован. Никаких приложений, никаких регистраций.','Почасовая ставка, оклад, переработки. Система считает, Excel выгружает. Ты просто смотришь итог.','Пришёл — пинг. Опоздал — пинг. Не вышел — пинг. Ты всегда знаешь что происходит на объекте.','Система фиксирует точку на карте в момент сканирования. Отметился с дивана? Видно сразу.','По сотруднику, по объекту, за период. Выгрузка в Excel и Google Sheets. Бухгалтер счастлив.'],
+  p2Label:'Инструмент 2', p2Desc:'Ганта, бригады, деньги, задачи. Всё в одном месте. Ты видишь картину целиком — а не кусок пазла.',
+  p2MoreBtn:'<i class="ti ti-building"></i> Подробнее о модуле →',
+  p2FeatT:['Диаграмма Ганта без боли','Бригады не пересекаются','Деньги — под контролем','Просрочка? Ты узнаешь первым','Отчёт за 10 секунд'],
+  p2FeatD:['Drag-and-drop задачи, зависимости, критический путь. Сразу видно что горит, а что ждёт.','Кросс-проектный календарь загрузки. Назначаешь бригаду — система сразу скажет если есть конфликт.','Бюджет против факта. Поступления от клиента. Кассовый поток. Никаких сюрпризов в конце месяца.','Система каждый день проверяет задачи и платежи. Уведомление придёт до того, как позвонит клиент.','PDF для клиента. Excel для бухгалтера. Полный срез по проекту одной кнопкой — без копипасты.'],
+  synLabel:'Почему оба',
+  synTitle:'Люди + Проекты =<br><span style="color:var(--lime)">Полный контроль</span>',
+  synDesc:'Отдельно каждый закрывает свою задачу. Вместе — ты видишь компанию целиком.',
+  synLName:'TIME MANAGEMENT', synLDesc:'Люди и время',
+  synLPoints:['Кто и когда на объекте','Сколько часов отработано','Зарплата без ошибок','Уведомления в Telegram'],
+  synRName:'CONSTRUCTION MGT', synRDesc:'Проекты и деньги',
+  synRPoints:['График и Ганта по объектам','Бюджет и кассовый поток','Загрузка бригад без конфликтов','Отчёты PDF и Excel'],
+  synBottom:'Два инструмента. Одна картина.',
+  synBottomSub:'От рабочего на объекте до рентабельности проекта — в одном месте',
+  revLabel:'Основано на реальном опыте',
+  revTitle:'Боли, которые мы<br><span style="color:var(--lime)">слышим каждый день</span>',
+  revDesc:'Это не выдуманные истории. Это то, с чем реально приходят строители — и то, что BuildOS закрывает.',
+  revPainIcons:['ti-clipboard-x','ti-message-circle-x','ti-chart-pie-off'],
+  revPainLabels:['Боль: учёт рабочего времени','Боль: контроль объектов','Боль: деньги и аналитика'],
+  revTexts:['«Прораб ведёт табель в тетрадке. В конце месяца — споры с рабочими, бухгалтер считает вручную, ошибки на каждом шагу. Один переплаченный месяц — это иногда 10–15% фонда.»','«Статус по проекту — в голове у прораба или в WhatsApp. Клиент звонит, спрашивает "ну как там". Ты сам не знаешь. Срок сорван — узнаёшь последним.»','«Бюджет — в Excel. Факт — у бухгалтера. Сводишь раз в квартал. К тому моменту уже поздно что-то менять. Непонятно, какой объект прибыльный, а какой тянет деньги вниз.»'],
+  revSolName:'Как решает BuildOS',
+  revSols:['QR — 5 секунд. Табель автоматически. Споров нет.','Ганта, бюджет, просрочки — всё в одном экране в реальном времени.','Бюджет vs факт в реальном времени. PDF-отчёт за 30 секунд.'],
+  hwLabel:'Старт',
+  hwTitle:'Три шага —<br><span style="color:var(--lime)">и система работает</span>',
+  hwDesc:'До 3 рабочих дней — и система полностью готова к работе.',
+  stepT:['Оставь заявку','Настройка и тесты — 3 дня','Рабочие отмечаются сами'],
+  stepD:['Перезвоним в течение 2 часов. Покажем систему на живом примере, обсудим объекты и формат запуска.','Настраиваем объекты, добавляем сотрудников, проводим тестовый прогон. Всё делаем сами — тебе остаётся только распечатать QR и повесить на объекте.','QR на объекте — рабочий отметился за 5 секунд. Табель идёт автоматически. Тетрадь больше не нужна.'],
+  prLabel:'Инвестиции',
+  prTitle:'Один платёж.<br><span style="color:var(--lime)">Данные остаются у вас.</span>',
+  prDesc:'Установка на ваш сервер — без подписок, без облака. Полный функционал PRO с первого дня.',
+  prHint:'Данные хранятся только на вашем сервере · Настройка и обучение команды включены · Без ежемесячных платежей',
+  prCards:[
+    {plan:'<i class="ti ti-clock" style="color:var(--lime)"></i> Time Management',limit:'без лимитов объектов',sub:'единовременно · установка ~3 дня',hl:['QR check-in/out + геолокация','Расчёт зарплаты · Автотабель PDF','Google Sheets · Telegram отчёты','Геофенс-блокировка · открытый API','AI-ассистент · выделенный менеджер'],btn:'Обсудить'},
+    {badge:'🖥 Своя установка',plan:'<i class="ti ti-building" style="color:var(--lime)"></i> Construction Management',limit:'без лимитов проектов',sub:'единовременно · установка ~3 дня',hl:['Диаграмма Ганта · бригады · задачи','Бюджет vs факт · кассовый поток','Google Sheets · PDF/Excel отчёты','AI-прогноз срывов · клиент. портал','Открытый API · выделенный менеджер'],btn:'Обсудить'},
+    {plan:'<i class="ti ti-layers-intersect" style="color:var(--lime)"></i> Оба продукта ★',limit:'без лимитов всего',sub:'единовременно · экономия €800',hl:['Полный Time Management PRO','Полный Construction Management PRO','Рабочие + проекты в одном месте','AI-ассистент по обоим продуктам','Выделенный менеджер · полный API'],btn:'Обсудить'}
+  ],
+  aiLabel:'Включено во все продукты',
+  aiTitle:'Узнай всё о своих объектах<br><span style="color:var(--lime)">за 10 секунд</span>',
+  aiDesc:'Просто напиши вопрос. AI смотрит в твои данные и отвечает — не нужно заходить в систему и искать по вкладкам. Работает с телефона, пока едешь на объект.',
+  aiExLabel:'Примеры запросов',
+  aiEx:[{mod:'Time Management',q:'"Кто из рабочих не вышел сегодня на объект Никосия?"'},{mod:'Time Management',q:'"Покажи топ-3 рабочих по часам за этот месяц"'},{mod:'Construction Management',q:'"Какие проекты рискуют сорвать срок на этой неделе?"'},{mod:'Construction Management',q:'"Сравни бюджет и факт по всем объектам за май"'}],
+  aiHowLabel:'Как это работает',
+  aiHow:[{t:'API-подключение к твоим данным',d:'AI видит реальные данные из Time Management и Construction Management — не демо, не шаблоны.'},{t:'10 готовых скиллов под строительство',d:'Присутствие, зарплата, сроки, бюджет, бригады — настроены заранее. Просто пишешь вопрос.'},{t:'Телефон, планшет, ноутбук — везде',d:'Утром с кофе, в машине, на совещании. Не нужно открывать дашборд — достаточно написать в чат.'},{t:'Обучаем твою команду',d:'Проводим онбординг: как задавать вопросы, какие скиллы есть, как читать ответы. За 1 час — все умеют.'}],
+  aiCtaLabel:'Включено в пакет РОСТ',
+  aiCtaDesc:'Работает с вашим ChatGPT или Claude — платите только за то, что используете. Подключение, 10 готовых скиллов и обучение команды включены в подписку.',
+  aiCtaBtn:'Смотреть тарифы',
+  faqLabel:'Вопросы и ответы', faqTitle:'Часто спрашивают', faqDesc:'Закрываем типичные возражения — честно.',
+  faqItems:[
+    {q:'Смогут ли рабочие разобраться?',a:'Да. Рабочему нужно только навести камеру на QR-код — это занимает 5 секунд. Никаких приложений, логинов и паролей. Если всё-таки возникли вопросы — мы проводим короткий инструктаж команды в день подключения.'},
+    {q:'Что если нет интернета на объекте?',a:'QR-отметка работает через мобильный интернет телефона сотрудника — на большинстве объектов достаточно 4G. Если у рабочего нет связи в конкретный момент, у менеджера есть резервная возможность: отметить сотрудника вручную прямо в системе. Данные не теряются.'},
+    {q:'Безопасны ли мои данные?',a:'При установке на свой сервер данные физически остаются у вас — мы к ним не имеем доступа. Облачный вариант использует шифрование в покое и при передаче. Резервное копирование ежедневно. Можно запросить выгрузку или удаление данных в любой момент.'},
+    {q:'Что включено в установку?',a:'Да, в любой момент без штрафов. Если отменяете в первые 30 дней — возвращаем деньги полностью. Данные можно забрать в формате Excel/CSV перед отключением.'},
+    {q:'Сколько времени занимает запуск?',a:'Настройка, интеграции, тестирование — около 3 рабочих дней. Обучение команды и выделенный менеджер входят в стоимость. После запуска данные и система полностью у вас — без зависимости от нашего сервера.'}
+  ],
+  stackLabel:'Надёжность',
+  stackTitle:'Работает — значит<br>написано нормально',
+  stackDesc:'Никаких сбоев в разгар рабочего дня. Современная архитектура, которую не нужно понимать — она просто работает.',
+  stackTM:['Работает как приложение','Данные защищены','Уведомления в Telegram','Синхронизация с Google Sheets','Геолокация при отметке','Установка на ваш сервер'],
+  stackCM:['Надёжное хранение данных','Отчёты PDF и Excel','Безопасная авторизация','Открытый API','Ежедневные бэкапы','Установка на ваш сервер'],
+  footerCopy:'Цифровые инструменты для строительного бизнеса · 2026',
+  footerDemo:'Записаться на демо →',
+  modalTitle:'Записаться на демо', modalSub:'Покажем систему на твоих данных. Займёт 20 минут.',
+  modalLabelName:'Имя', modalLabelPhone:'Телефон', modalLabelCompany:'Компания', modalOptional:'(необязательно)',
+  modalConsent:'Я согласен(а) на ', modalConsentLink:'обработку персональных данных',
+  modalSubmit:'Отправить заявку', modalNote:'Свяжемся в течение 2 часов', modalReqFields:'обязательные поля',
+  sending:'Отправляем...', sent:'Заявка отправлена ✓', errSend:'Ошибка отправки',
+  alertName:'Пожалуйста, введите имя.', alertPhone:'Пожалуйста, введите телефон.',
+  barDemo:'Демо'
+},
+en:{
+  navLinks:['Products','Reviews','Pricing','AI','FAQ'],
+  mobileLinks:['Products','Reviews','Pricing','AI','FAQ'],
+  bookDemo:'Book a Demo', bookDemoArrow:'Book a Demo →',
+  pmBtn:'<i class="ti ti-building"></i> PM Module →',
+  heroTitle:'STOP<br><span style="text-decoration:line-through">WASTING TIME...</span><br><span class="accent">MANAGE</span><br><span class="accent">YOUR PROCESS!</span>',
+  heroSub:"Two tools — who's working and what's being built. Full control, no Excel or messengers.",
+  heroTag:'Software for construction companies',
+  tmCardSub:'Today · Site «Cypresses»',
+  tmStat1:'On site now', tmStat2:'Worked today', tmStat3:'To pay',
+  tmNotif:'<i class="ti ti-brand-telegram"></i> Notifications on',
+  cmCardSub:'Project · «Nicosia Office»',
+  ganttMini:['Foundation','Frame','Roofing','Finishing'],
+  cmStat1:'Project completion', cmStat2:'Budget actual / planned', cmStat3:'Active tasks',
+  cmOverdue:'<i class="ti ti-bell"></i> 2 overdue · attention needed', cmToday:'today',
+  tmMockupTitle:'Time Management — «Limassol Villa»',
+  mStat1:'On site', mStat2:'Hours today', mStat3:'To pay',
+  workerStatuses:['On site','On site','Finished','On site','Finished'],
+  cmMockupTitle:'Construction Management — «Nicosia Office»',
+  ganttMonths:['MAY','JUN','JUL','AUG'],
+  ganttLabels:['Foundation','Frame','Roofing','Finishing','Delivery'],
+  cmStat4:'Completion', cmStat5:'Actual / €190k',
+  painLabel:'Recognize yourself',
+  painTitle:'How it usually<br>looks for you',
+  painTitles:['Timesheet in a notebook','WhatsApp is your CRM','Money is gone — nobody knows where','Deadline missed. Again.'],
+  painTexts:["Worker says 'I worked 8 hours', you say 'no, 6'. Conflict. Every month. Same one.","Site status is in the foreman's head. You call, no answer. The client is already texting.","Budget in Excel. Actuals in the accountant's head. Reconciled once a year. Too late.","Crew is busy at another site — you find out from an angry client, not the system."],
+  p1Label:'Tool 1', p1Desc:"Who showed up, hours worked, how much to pay — all automatic. No notebooks, no disputes.",
+  p1FeatT:["QR tag at the site — that's it",'Payroll calculates itself','Telegram notifies before you notice','Geolocation on check-in','Report — one click'],
+  p1FeatD:['Worker opens a link on their phone, scans QR. Check-in recorded. No apps, no sign-ups.','Hourly rate, salary, overtime. The system calculates, Excel exports. You just see the result.',"Arrived — ping. Late — ping. No-show — ping. You always know what's happening at the site.",'System records the map location at scan time. Checked in from the couch? Spotted immediately.','By employee, by site, by period. Export to Excel and Google Sheets. Accountant is happy.'],
+  p2Label:'Tool 2', p2Desc:'Gantt, crews, money, tasks. Everything in one place. You see the full picture — not a puzzle piece.',
+  p2MoreBtn:'<i class="ti ti-building"></i> Module details →',
+  p2FeatT:['Gantt chart without the pain','No crew conflicts','Money under control',"Overdue? You'll know first",'Report in 10 seconds'],
+  p2FeatD:["Drag-and-drop tasks, dependencies, critical path. See immediately what's urgent and what's waiting.",'Cross-project load calendar. Assign a crew — the system immediately flags any conflict.','Budget vs actuals. Client payments. Cash flow. No surprises at month end.',"The system checks tasks and payments daily. You'll get a notification before the client calls.",'PDF for the client. Excel for the accountant. Full project snapshot with one click — no copy-paste.'],
+  synLabel:'Why both',
+  synTitle:'People + Projects =<br><span style="color:var(--lime)">Full Control</span>',
+  synDesc:'Each solves its own problem. Together — you see the full company picture.',
+  synLName:'TIME MANAGEMENT', synLDesc:'People & time',
+  synLPoints:['Who is on site and when','Hours worked','Payroll without errors','Telegram notifications'],
+  synRName:'CONSTRUCTION MGT', synRDesc:'Projects & money',
+  synRPoints:['Schedule and Gantt by site','Budget and cash flow','Crew scheduling without conflicts','PDF and Excel reports'],
+  synBottom:'Two tools. One picture.',
+  synBottomSub:'From on-site worker to project profitability — in one place',
+  revLabel:'Based on real experience',
+  revTitle:'Pain points we<br><span style="color:var(--lime)">hear every day</span>',
+  revDesc:"These aren't made-up stories. Real pain points builders bring to us — and what BuildOS solves.",
+  revPainIcons:['ti-clipboard-x','ti-message-circle-x','ti-chart-pie-off'],
+  revPainLabels:['Pain: time tracking','Pain: site control','Pain: finances & analytics'],
+  revTexts:['«The foreman keeps the timesheet in a notebook. End of month — disputes with workers, manual accounting, errors at every step. One overpaid month can be 10–15% of payroll.»',"«Project status is in the foreman's head or in WhatsApp. Client calls asking 'how's it going'. You don't know yourself. Deadline missed — you're the last to find out.»","«Budget in Excel. Actuals with the accountant. Reconciled quarterly. By then it's too late to change anything. No idea which site is profitable and which is bleeding money.»"],
+  revSolName:'How BuildOS solves it',
+  revSols:['QR — 5 seconds. Timesheet automatic. No disputes.','Gantt, budget, overdue — all in one real-time screen.','Budget vs actuals in real time. PDF report in 30 seconds.'],
+  hwLabel:'Getting started',
+  hwTitle:'Three steps —<br><span style="color:var(--lime)">and the system is live</span>',
+  hwDesc:'Up to 3 business days — and the system is fully operational.',
+  stepT:['Submit a request','Setup & testing — 3 days','Workers check in themselves'],
+  stepD:["We'll call back within 2 hours. Show you the system with a live example, discuss your sites and launch format.",'We configure sites, add employees, run a test cycle. We handle everything — you just print the QR and put it up at the site.','QR at the site — worker checks in in 5 seconds. Timesheet runs automatically. Notebook no longer needed.'],
+  prLabel:'Investment',
+  prTitle:'One payment.<br><span style="color:var(--lime)">Your data stays with you.</span>',
+  prDesc:'Installed on your server — no subscriptions, no cloud. Full PRO functionality from day one.',
+  prHint:'Data stored only on your server · Setup and team training included · No monthly payments',
+  prCards:[
+    {plan:'<i class="ti ti-clock" style="color:var(--lime)"></i> Time Management',limit:'unlimited sites',sub:'one-time · setup ~3 days',hl:['QR check-in/out + geolocation','Payroll calculation · Auto-timesheet PDF','Google Sheets · Telegram reports','Geofence blocking · open API','AI assistant · dedicated manager'],btn:'Discuss'},
+    {badge:'🖥 Self-hosted',plan:'<i class="ti ti-building" style="color:var(--lime)"></i> Construction Management',limit:'unlimited projects',sub:'one-time · setup ~3 days',hl:['Gantt chart · crews · tasks','Budget vs actuals · cash flow','Google Sheets · PDF/Excel reports','AI deadline predictions · client portal','Open API · dedicated manager'],btn:'Discuss'},
+    {plan:'<i class="ti ti-layers-intersect" style="color:var(--lime)"></i> Both products ★',limit:'everything unlimited',sub:'one-time · save €800',hl:['Full Time Management PRO','Full Construction Management PRO','Workers + projects in one place','AI assistant for both products','Dedicated manager · full API'],btn:'Discuss'}
+  ],
+  aiLabel:'Included in all products',
+  aiTitle:'Get all answers about your sites<br><span style="color:var(--lime)">in 10 seconds</span>',
+  aiDesc:"Just type a question. AI looks at your data and answers — no need to open the system and search through tabs. Works from your phone on the way to the site.",
+  aiExLabel:'Example queries',
+  aiEx:[{mod:'Time Management',q:'"Which workers didn\'t show up at the Nicosia site today?"'},{mod:'Time Management',q:'"Show top-3 workers by hours this month"'},{mod:'Construction Management',q:'"Which projects are at risk of missing the deadline this week?"'},{mod:'Construction Management',q:'"Compare budget vs actuals for all sites in May"'}],
+  aiHowLabel:'How it works',
+  aiHow:[{t:'API connection to your data',d:'AI sees real data from Time Management and Construction Management — not demos, not templates.'},{t:'10 ready-made skills for construction',d:'Attendance, payroll, deadlines, budget, crews — pre-configured. Just type a question.'},{t:'Phone, tablet, laptop — everywhere',d:'Morning coffee, in the car, at a meeting. No need to open the dashboard — just type in chat.'},{t:'We train your team',d:'We run onboarding: how to ask questions, which skills are available, how to read answers. 1 hour — everyone\'s ready.'}],
+  aiCtaLabel:'Included in GROWTH plan',
+  aiCtaDesc:'Works with your ChatGPT or Claude — pay only for what you use. Connection, 10 ready skills and team training included.',
+  aiCtaBtn:'View pricing',
+  faqLabel:'Questions & Answers', faqTitle:'Frequently asked', faqDesc:'Addressing common concerns — honestly.',
+  faqItems:[
+    {q:'Will workers be able to figure it out?',a:'Yes. Workers just point their camera at the QR code — that takes 5 seconds. No apps, no logins, no passwords. If any questions come up — we run a quick team briefing on the day of setup.'},
+    {q:"What if there's no internet at the site?",a:"QR check-in works via the employee's mobile internet — 4G is sufficient for most sites. If a worker has no connection at a specific moment, the manager has a backup option: mark the employee manually directly in the system. No data is lost."},
+    {q:'Is my data secure?',a:"With self-hosting, data physically stays with you — we have no access. The cloud option uses encryption at rest and in transit. Daily backups. You can request export or deletion of your data at any time."},
+    {q:"What's included in the setup?",a:'No penalties — cancel anytime. If you cancel within the first 30 days — full refund. You can export your data in Excel/CSV format before disconnecting.'},
+    {q:'How long does setup take?',a:'Configuration, integrations, testing — about 3 business days. Team training and a dedicated manager are included in the price. After launch, the data and system are completely yours — no dependency on our server.'}
+  ],
+  stackLabel:'Reliability',
+  stackTitle:"It works — because<br>it's built properly",
+  stackDesc:"No downtime during peak work hours. Modern architecture you don't need to understand — it just works.",
+  stackTM:['Works as an app','Data protected','Telegram notifications','Google Sheets sync','Geolocation on check-in','Self-hosted installation'],
+  stackCM:['Reliable data storage','PDF and Excel reports','Secure authentication','Open API','Daily backups','Self-hosted installation'],
+  footerCopy:'Digital tools for the construction business · 2026',
+  footerDemo:'Book a Demo →',
+  modalTitle:'Book a Demo', modalSub:"We'll show the system with your data. Takes 20 minutes.",
+  modalLabelName:'Name', modalLabelPhone:'Phone', modalLabelCompany:'Company', modalOptional:'(optional)',
+  modalConsent:'I agree to the ', modalConsentLink:'processing of personal data',
+  modalSubmit:'Send request', modalNote:"We'll contact you within 2 hours", modalReqFields:'required fields',
+  sending:'Sending...', sent:'Request sent ✓', errSend:'Sending failed',
+  alertName:'Please enter your name.', alertPhone:'Please enter your phone number.',
+  barDemo:'Demo'
+}
+};
+
+function applyLang(lang){
+  const t=T[lang];
+  window._lang=lang;
+  window._langT=t;
+  localStorage.setItem('buildos_lang',lang);
+  document.documentElement.lang=lang==='en'?'en':'ru';
+
+  /* switcher buttons */
+  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.dataset.lang===lang));
+
+  /* nav links */
+  document.querySelectorAll('#navbar .nav-links a').forEach((el,i)=>{if(t.navLinks[i])el.textContent=t.navLinks[i];});
+  document.querySelectorAll('#mobileMenu a:not([style*="color:var(--lime)"])').forEach((el,i)=>{if(t.mobileLinks[i])el.textContent=t.mobileLinks[i];});
+  const mobDemo=document.getElementById('mob-demo-link');
+  if(mobDemo)mobDemo.textContent=t.bookDemoArrow;
+  const navCta=document.getElementById('nav-cta-btn');
+  if(navCta)navCta.textContent=t.bookDemo;
+
+  /* hero */
+  const heroTitle=document.querySelector('.hero-title');
+  if(heroTitle)heroTitle.innerHTML=t.heroTitle;
+  const heroSub=document.querySelector('.hero-sub');
+  if(heroSub)heroSub.textContent=t.heroSub;
+  const heroTag=document.querySelector('.hero-tag');
+  if(heroTag)heroTag.innerHTML='<div class="hero-tag-dot"></div>'+t.heroTag;
+  const heroPmBtn=document.querySelector('.hero-cta .btn-secondary');
+  if(heroPmBtn)heroPmBtn.innerHTML=t.pmBtn;
+  document.querySelectorAll('.hero-cta .btn-primary').forEach(el=>{if(!el.id)el.innerHTML='<i class="ti ti-calendar"></i> '+t.bookDemo;});
+
+  /* TM card */
+  const tm=document.getElementById('card0');
+  if(tm){
+    const sub=tm.querySelector('.fc-sub');if(sub)sub.textContent=t.tmCardSub;
+    const stats=tm.querySelectorAll('.fc-stat>span:first-child');
+    if(stats[0])stats[0].textContent=t.tmStat1;
+    if(stats[1])stats[1].textContent=t.tmStat2;
+    if(stats[2])stats[2].textContent=t.tmStat3;
+    const notifSpan=tm.querySelector('span[style*="ti-brand-telegram"]');
+    if(notifSpan)notifSpan.innerHTML=t.tmNotif;
+  }
+  /* CM card */
+  const cm=document.getElementById('card1');
+  if(cm){
+    const sub=cm.querySelector('.fc-sub');if(sub)sub.textContent=t.cmCardSub;
+    cm.querySelectorAll('.gm-label').forEach((el,i)=>{if(t.ganttMini[i])el.textContent=t.ganttMini[i];});
+    const stats=cm.querySelectorAll('.fc-stat>span:first-child');
+    if(stats[0])stats[0].textContent=t.cmStat1;
+    if(stats[1])stats[1].textContent=t.cmStat2;
+    if(stats[2])stats[2].textContent=t.cmStat3;
+    const bellSpan=cm.querySelector('span[style*="ti-bell"]');
+    if(bellSpan)bellSpan.innerHTML=t.cmOverdue;
+    const todayEl=cm.querySelectorAll('.fc-stat span[style*="color:var(--muted)"]');
+    todayEl.forEach(el=>{if(el.textContent.match(/сегодня|today/i))el.textContent=t.cmToday;});
+  }
+  /* TM mockup */
+  const mockupTitles=document.querySelectorAll('.mockup-title');
+  if(mockupTitles[0])mockupTitles[0].textContent=t.tmMockupTitle;
+  const prod1=document.getElementById('products');
+  if(prod1){
+    const mlabs=prod1.querySelectorAll('.m-lab');
+    if(mlabs[0])mlabs[0].textContent=t.mStat1;
+    if(mlabs[1])mlabs[1].textContent=t.mStat2;
+    if(mlabs[2])mlabs[2].textContent=t.mStat3;
+    prod1.querySelectorAll('.worker-status').forEach((el,i)=>{if(t.workerStatuses[i])el.textContent=t.workerStatuses[i];});
+  }
+  /* CM mockup */
+  if(mockupTitles[1])mockupTitles[1].textContent=t.cmMockupTitle;
+  document.querySelectorAll('.gantt-month').forEach((el,i)=>{if(t.ganttMonths[i])el.textContent=t.ganttMonths[i];});
+  document.querySelectorAll('.gantt-label').forEach((el,i)=>{if(t.ganttLabels[i])el.textContent=t.ganttLabels[i];});
+  const cmMlabs=document.querySelector('[data-num="02"] .m-stat:nth-child(1) .m-lab');
+  if(cmMlabs)cmMlabs.textContent=t.cmStat4;
+  const cmMlab2=document.querySelector('[data-num="02"] .m-stat:nth-child(2) .m-lab');
+  if(cmMlab2)cmMlab2.textContent=t.cmStat5;
+
+  /* pain */
+  const pain=document.getElementById('pain');
+  if(pain){
+    const lbl=pain.querySelector('.section-label');if(lbl)lbl.textContent=t.painLabel;
+    const ttl=pain.querySelector('.section-title');if(ttl)ttl.innerHTML=t.painTitle;
+    pain.querySelectorAll('.pain-title').forEach((el,i)=>{if(t.painTitles[i])el.textContent=t.painTitles[i];});
+    pain.querySelectorAll('.pain-text').forEach((el,i)=>{if(t.painTexts[i])el.textContent=t.painTexts[i];});
+  }
+
+  /* product 1 */
+  if(prod1){
+    const lbl=prod1.querySelector('.section-label');if(lbl)lbl.textContent=t.p1Label;
+    const dsc=prod1.querySelector('.section-desc');if(dsc)dsc.textContent=t.p1Desc;
+    prod1.querySelectorAll('.feat-title').forEach((el,i)=>{if(t.p1FeatT[i])el.textContent=t.p1FeatT[i];});
+    prod1.querySelectorAll('.feat-desc').forEach((el,i)=>{if(t.p1FeatD[i])el.textContent=t.p1FeatD[i];});
+  }
+
+  /* product 2 */
+  const prod2=document.querySelector('[data-num="02"]');
+  if(prod2){
+    const lbl=prod2.querySelector('.section-label');if(lbl)lbl.textContent=t.p2Label;
+    const dsc=prod2.querySelector('.section-desc');if(dsc)dsc.textContent=t.p2Desc;
+    const moreBtn=prod2.querySelector('.btn-secondary');if(moreBtn)moreBtn.innerHTML=t.p2MoreBtn;
+    prod2.querySelectorAll('.feat-title').forEach((el,i)=>{if(t.p2FeatT[i])el.textContent=t.p2FeatT[i];});
+    prod2.querySelectorAll('.feat-desc').forEach((el,i)=>{if(t.p2FeatD[i])el.textContent=t.p2FeatD[i];});
+  }
+
+  /* synergy */
+  const syn=document.getElementById('synergy');
+  if(syn){
+    const lbl=syn.querySelector('.section-label');if(lbl)lbl.textContent=t.synLabel;
+    const ttl=syn.querySelector('.section-title');if(ttl)ttl.innerHTML=t.synTitle;
+    const dsc=syn.querySelector('.section-desc');if(dsc)dsc.textContent=t.synDesc;
+    const synL=document.getElementById('synL');
+    if(synL){
+      const n=synL.querySelector('.syn-name');if(n)n.textContent=t.synLName;
+      const d=synL.querySelector('.syn-desc');if(d)d.textContent=t.synLDesc;
+      synL.querySelectorAll('.syn-point').forEach((el,i)=>{if(t.synLPoints[i])el.innerHTML='<i class="ti ti-check"></i>'+t.synLPoints[i];});
+    }
+    const synR=document.getElementById('synR');
+    if(synR){
+      const n=synR.querySelector('.syn-name');if(n)n.textContent=t.synRName;
+      const d=synR.querySelector('.syn-desc');if(d)d.textContent=t.synRDesc;
+      synR.querySelectorAll('.syn-point').forEach((el,i)=>{if(t.synRPoints[i])el.innerHTML='<i class="ti ti-check"></i>'+t.synRPoints[i];});
+    }
+    const sb=syn.querySelector('[style*="font-size:19px"]');if(sb)sb.textContent=t.synBottom;
+    const ss=syn.querySelector('[style*="font-size:15px;font-weight:300"]');if(ss)ss.textContent=t.synBottomSub;
+  }
+
+  /* reviews */
+  const rev=document.getElementById('reviews');
+  if(rev){
+    const lbl=rev.querySelector('.section-label');if(lbl)lbl.textContent=t.revLabel;
+    const ttl=rev.querySelector('.section-title');if(ttl)ttl.innerHTML=t.revTitle;
+    const dsc=rev.querySelector('.section-desc');if(dsc)dsc.textContent=t.revDesc;
+    rev.querySelectorAll('.testimonial-card').forEach((card,i)=>{
+      const painEl=card.querySelector('[style*="font-size:11px"]');
+      if(painEl&&t.revPainLabels[i]){
+        painEl.innerHTML='<i class="ti '+t.revPainIcons[i]+'"></i> &nbsp;'+t.revPainLabels[i];
+      }
+      const txtEl=card.querySelector('.testi-text');if(txtEl&&t.revTexts[i])txtEl.textContent=t.revTexts[i];
+      const sn=card.querySelector('.testi-name');if(sn)sn.textContent=t.revSolName;
+      const sc=card.querySelector('.testi-company');if(sc&&t.revSols[i])sc.textContent=t.revSols[i];
+    });
+  }
+
+  /* how to start */
+  const hw=document.getElementById('howto');
+  if(hw){
+    const lbl=hw.querySelector('.section-label');if(lbl)lbl.textContent=t.hwLabel;
+    const ttl=hw.querySelector('.section-title');if(ttl)ttl.innerHTML=t.hwTitle;
+    const dsc=hw.querySelector('.section-desc');if(dsc)dsc.textContent=t.hwDesc;
+    hw.querySelectorAll('.step-title').forEach((el,i)=>{if(t.stepT[i])el.textContent=t.stepT[i];});
+    hw.querySelectorAll('.step-desc').forEach((el,i)=>{if(t.stepD[i])el.textContent=t.stepD[i];});
+  }
+
+  /* pricing */
+  const pr=document.getElementById('pricing');
+  if(pr){
+    const lbl=pr.querySelector('.section-label');if(lbl)lbl.textContent=t.prLabel;
+    const ttl=pr.querySelector('.section-title');if(ttl)ttl.innerHTML=t.prTitle;
+    const dsc=pr.querySelector('.section-desc');if(dsc)dsc.textContent=t.prDesc;
+    const hintSpan=pr.querySelector('.pricing-hint span');if(hintSpan)hintSpan.textContent=t.prHint;
+    pr.querySelectorAll('.price-card').forEach((card,i)=>{
+      const cd=t.prCards[i];if(!cd)return;
+      const planEl=card.querySelector('.price-plan');if(planEl)planEl.innerHTML=cd.plan;
+      const limEl=card.querySelector('.price-limit');if(limEl)limEl.textContent=cd.limit;
+      const subEl=card.querySelector('.price-sub');if(subEl)subEl.textContent=cd.sub;
+      const hlEl=card.querySelector('.price-highlights');if(hlEl)hlEl.innerHTML=cd.hl.map(h=>'<div class="price-hl-item">'+h+'</div>').join('');
+      const btnEl=card.querySelector('.price-btn');if(btnEl)btnEl.textContent=cd.btn;
+      if(cd.badge){const bdg=card.querySelector('.price-badge');if(bdg)bdg.textContent=cd.badge;}
+    });
+  }
+
+  /* AI */
+  const ai=document.getElementById('ai');
+  if(ai){
+    const lbl=ai.querySelector('.section-label');if(lbl)lbl.textContent=t.aiLabel;
+    const ttl=ai.querySelector('.section-title');if(ttl)ttl.innerHTML=t.aiTitle;
+    const dsc=ai.querySelector('.section-desc');if(dsc)dsc.textContent=t.aiDesc;
+    const exLabels=ai.querySelectorAll('[style*="letter-spacing:2px"]');
+    if(exLabels[0])exLabels[0].textContent=t.aiExLabel;
+    document.querySelectorAll('#aiExamplesList>div').forEach((card,i)=>{
+      const ex=t.aiEx[i];if(!ex)return;
+      const modEl=card.querySelector('[style*="color:var(--muted)"]');if(modEl)modEl.textContent=ex.mod;
+      const qEl=card.querySelector('[style*="font-weight:600"]');if(qEl)qEl.textContent=ex.q;
+    });
+    if(exLabels[1])exLabels[1].textContent=t.aiHowLabel;
+    ai.querySelectorAll('[style*="gap:16px;align-items:flex-start"]').forEach((item,i)=>{
+      const h=t.aiHow[i];if(!h)return;
+      const tEl=item.querySelector('[style*="font-weight:700;font-size:15px"]');if(tEl)tEl.textContent=h.t;
+      const dEl=item.querySelector('[style*="font-size:13px;color:var(--muted)"]');if(dEl)dEl.textContent=h.d;
+    });
+    const ctaBar=ai.querySelector('.ai-cta-bar');
+    if(ctaBar){
+      const cl=ctaBar.querySelector('[style*="color:var(--lime)"]');if(cl)cl.textContent=t.aiCtaLabel;
+      const cd=ctaBar.querySelector('[style*="color:var(--muted)"]');if(cd)cd.textContent=t.aiCtaDesc;
+      const cb=ctaBar.querySelector('a[href="#pricing"]');if(cb)cb.textContent=t.aiCtaBtn;
+    }
+  }
+
+  /* FAQ */
+  const faq=document.getElementById('faq');
+  if(faq){
+    const lbl=faq.querySelector('.section-label');if(lbl)lbl.textContent=t.faqLabel;
+    const ttl=faq.querySelector('.section-title');if(ttl)ttl.textContent=t.faqTitle;
+    const dsc=faq.querySelector('.section-desc');if(dsc)dsc.textContent=t.faqDesc;
+    faq.querySelectorAll('.faq-item').forEach((item,i)=>{
+      const fi=t.faqItems[i];if(!fi)return;
+      const q=item.querySelector('.faq-question');
+      if(q){const chev=q.querySelector('.faq-chevron');q.textContent=fi.q;if(chev)q.appendChild(chev);}
+      const a=item.querySelector('.faq-answer-inner');if(a)a.textContent=fi.a;
+    });
+  }
+
+  /* stack */
+  const stk=document.getElementById('stack');
+  if(stk){
+    const lbl=stk.querySelector('.section-label');if(lbl)lbl.textContent=t.stackLabel;
+    const ttl=stk.querySelector('.section-title');if(ttl)ttl.innerHTML=t.stackTitle;
+    const dsc=stk.querySelector('.section-desc');if(dsc)dsc.textContent=t.stackDesc;
+    const allBadges=Array.from(stk.querySelectorAll('.stack-badge'));
+    allBadges.slice(0,6).forEach((el,i)=>{if(t.stackTM[i]){const ic=el.querySelector('i');el.textContent=t.stackTM[i];if(ic)el.prepend(ic);}});
+    allBadges.slice(6,12).forEach((el,i)=>{if(t.stackCM[i]){const ic=el.querySelector('i');el.textContent=t.stackCM[i];if(ic)el.prepend(ic);}});
+  }
+
+  /* footer */
+  const fc=document.querySelector('.footer-copy');if(fc)fc.textContent=t.footerCopy;
+  const fd=document.querySelector('.footer-copy a[onclick*="openModal"]');if(fd)fd.textContent=t.footerDemo;
+
+  /* modal */
+  const modal=document.getElementById('demoModal');
+  if(modal){
+    const mt=modal.querySelector('.modal-title');if(mt)mt.textContent=t.modalTitle;
+    const ms=modal.querySelector('.modal-sub');if(ms)ms.textContent=t.modalSub;
+    const labels=modal.querySelectorAll('.form-label');
+    if(labels[0])labels[0].innerHTML=t.modalLabelName+' <span style="color:var(--lime)">*</span>';
+    if(labels[1])labels[1].innerHTML=t.modalLabelPhone+' <span style="color:var(--lime)">*</span>';
+    if(labels[2])labels[2].innerHTML=t.modalLabelCompany+' <span style="color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0">'+t.modalOptional+'</span>';
+    const conSpan=modal.querySelector('.form-consent-label span');
+    if(conSpan){const lnk=conSpan.querySelector('a');if(lnk){lnk.textContent=t.modalConsentLink;const txt=document.createTextNode(t.modalConsent);conSpan.replaceChild(txt,conSpan.firstChild);}}
+    const sb=modal.querySelector('.form-submit');if(sb&&!sb.disabled)sb.textContent=t.modalSubmit;
+    const fn=modal.querySelector('.form-note');if(fn)fn.innerHTML=t.modalNote+' · <span style="color:var(--lime)">*</span> '+t.modalReqFields;
+  }
+
+  /* bottom bar */
+  const bd=document.querySelector('.bottom-bar-btn--demo');
+  if(bd){const ic=bd.querySelector('i');bd.textContent=t.barDemo;if(ic)bd.prepend(ic);}
+}
+
+window.setLang=applyLang;
+
+/* patch submitForm to use current lang */
+const _origSubmit=window.submitForm;
+window.submitForm=async function(){
+  const t=(window._langT||T.ru);
+  const name=document.getElementById('fieldName').value.trim();
+  const contact=document.getElementById('fieldPhone').value.trim();
+  const company=document.getElementById('fieldCompany').value.trim();
+  if(!name){document.getElementById('fieldName').focus();alert(t.alertName);return;}
+  if(!contact){document.getElementById('fieldPhone').focus();alert(t.alertPhone);return;}
+  const consent=document.getElementById('fieldConsent');
+  if(!consent.checked){
+    const lbl=document.getElementById('consentLabel');lbl.classList.add('error');
+    lbl.scrollIntoView({behavior:'smooth',block:'center'});
+    setTimeout(()=>lbl.classList.remove('error'),2500);return;
+  }
+  const btn=document.querySelector('#demoModal .form-submit');
+  btn.textContent=t.sending;btn.disabled=true;
+  const text='🏗 Новая заявка на демо — BuildOS\n\n👤 Имя: '+name+'\n📞 Контакт: '+contact+(company?'\n🏢 Компания: '+company:'')+'\n\n⏰ '+new Date().toLocaleString('ru-RU',{timeZone:'Europe/Moscow'});
+  try{
+    const res=await fetch('https://api.telegram.org/bot8728272597:AAFu2uQjVEVGrtbFMSpjI4r5OOpJwULncaQ/sendMessage',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:7398422197,text,parse_mode:'HTML'})});
+    if(!res.ok)throw new Error('HTTP '+res.status);
+    btn.textContent=t.sent;btn.style.background='#4caf50';
+    ['fieldName','fieldPhone','fieldCompany'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+    document.getElementById('fieldConsent').checked=false;
+    setTimeout(closeModal,1800);
+  }catch(e){
+    btn.textContent=t.errSend;btn.style.background='#e53935';btn.disabled=false;
+    setTimeout(()=>{btn.textContent=t.modalSubmit;btn.style.background='';},3000);
+  }
+};
+
+/* init */
+const saved=localStorage.getItem('buildos_lang')||'ru';
+applyLang(saved);
+})();
+</script>
 
 </body>
 </html>
