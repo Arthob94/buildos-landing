@@ -1205,9 +1205,11 @@
     setTimeout(()=>document.getElementById('pm-modal-name').focus(),100);
     /* sync lang strings */
     const t=window._pmLangT||{};
-    if(t.bookDemo){
-      const el=document.getElementById('pm-modal-eyebrow');if(el)el.textContent=t.bookDemo;
-    }
+    if(t.bookDemo){document.getElementById('pm-modal-eyebrow').textContent=t.bookDemo;}
+    const titleEl=document.getElementById('pm-modal-title');
+    if(titleEl)titleEl.textContent=t.modalTitle||(lang==='en'?'Live demo in 20 minutes':'Живое демо за 20 минут');
+    const subEl=document.getElementById('pm-modal-sub');
+    if(subEl)subEl.textContent=t.modalSub||(lang==='en'?"We'll show the platform on real examples — no obligations.":'Покажем платформу на реальных примерах — без обязательств.');
     if(t.formName){document.getElementById('pm-modal-lbl-name').textContent=t.formName;}
     if(t.formPhone){document.getElementById('pm-modal-lbl-phone').textContent=t.formPhone;}
     if(t.formCompany){document.getElementById('pm-modal-lbl-company').textContent=t.formCompany;}
