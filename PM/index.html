@@ -217,10 +217,10 @@
           Telegram
         </a>
       </div>
-      <a href="#contact" onclick="closeMobileMenu()" class="cta-btn cursor-pointer flex items-center justify-center gap-2 text-white font-semibold px-6 py-4 rounded-xl w-full" style="background:#3182ce;">
+      <button onclick="openPMModal();closeMobileMenu()" class="cta-btn cursor-pointer flex items-center justify-center gap-2 text-white font-semibold px-6 py-4 rounded-xl w-full" style="background:#3182ce;">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 10l-4 4l6 6l4-16l-18 7l4 2l2 6l3-4"/></svg>
         Записаться на демо
-      </a>
+      </button>
     </div>
   </nav>
 </div>
@@ -260,10 +260,10 @@
         <button class="pm-lang-btn active" data-lang="ru" onclick="setPMLang('ru')">RU</button>
         <button class="pm-lang-btn" data-lang="en" onclick="setPMLang('en')">EN</button>
       </div>
-      <a href="#contact" id="pm-nav-cta" class="cta-btn cursor-pointer hidden sm:inline-flex items-center gap-2 text-white text-sm font-semibold px-4 py-2 rounded-lg" style="background:#3182ce;">
+      <button onclick="openPMModal()" id="pm-nav-cta" class="cta-btn cursor-pointer hidden sm:inline-flex items-center gap-2 text-white text-sm font-semibold px-4 py-2 rounded-lg" style="background:#3182ce;">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 10l-4 4l6 6l4-16l-18 7l4 2l2 6l3-4"/></svg>
         Записаться на демо
-      </a>
+      </button>
       <!-- Mobile burger -->
       <button onclick="openMobileMenu()" class="md:hidden cursor-pointer w-10 h-10 flex items-center justify-center rounded-lg" style="color:#334155;" aria-label="Открыть меню">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
@@ -298,10 +298,10 @@
 
       <!-- CTAs -->
       <div class="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-3 mb-10 sm:mb-14">
-        <a href="#contact" class="cta-btn cursor-pointer inline-flex items-center justify-center gap-2 text-white font-semibold px-6 py-3.5 sm:py-3 rounded-lg text-sm" style="background:#3182ce;">
+        <button onclick="openPMModal()" class="cta-btn cursor-pointer inline-flex items-center justify-center gap-2 text-white font-semibold px-6 py-3.5 sm:py-3 rounded-lg text-sm" style="background:#3182ce;">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 10l-4 4l6 6l4-16l-18 7l4 2l2 6l3-4"/></svg>
           Записаться на демо
-        </a>
+        </button>
         <a href="#features" class="cta-btn-outline cursor-pointer inline-flex items-center justify-center gap-2 font-semibold px-6 py-3 rounded-lg text-sm border" style="color:#e2e8f0; border-color:rgba(255,255,255,0.2);">
           Смотреть возможности
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
@@ -932,7 +932,7 @@
           <li class="flex items-center gap-2"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#3182ce" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Открытый API · Выделенный менеджер</li>
           <li class="flex items-center gap-2"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#3182ce" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Данные остаются на вашем сервере</li>
         </ul>
-        <a href="#contact" class="cta-btn cursor-pointer flex items-center justify-center py-3.5 rounded-xl text-sm font-semibold text-white" style="background:#3182ce;">Записаться на демо</a>
+        <button onclick="openPMModal()" class="cta-btn cursor-pointer flex items-center justify-center py-3.5 rounded-xl text-sm font-semibold text-white" style="background:#3182ce;">Записаться на демо</button>
       </div>
     </div>
 
@@ -1152,6 +1152,101 @@
   </div>
 </footer>
 
+<!-- ═══════════════════════════ PM DEMO MODAL ═══════════════════════════ -->
+<div id="pmDemoModal" style="display:none; position:fixed; inset:0; z-index:9999; align-items:center; justify-content:center; padding:16px; background:rgba(10,20,40,0.7); backdrop-filter:blur(4px);" onclick="if(event.target===this)closePMModal()">
+  <div style="background:#0f1f3d; border:1px solid rgba(255,255,255,0.12); border-radius:20px; width:100%; max-width:480px; padding:32px 28px; position:relative; box-shadow:0 24px 80px rgba(0,0,0,0.5);">
+    <!-- Close -->
+    <button onclick="closePMModal()" style="position:absolute; top:16px; right:16px; background:rgba(255,255,255,0.08); border:none; border-radius:8px; width:32px; height:32px; cursor:pointer; display:flex; align-items:center; justify-content:center; color:#a0b8d8;" aria-label="Закрыть">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <!-- Header -->
+    <p id="pm-modal-eyebrow" style="color:#7ab8f5; font-size:11px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; margin-bottom:8px;">Записаться на демо</p>
+    <h3 id="pm-modal-title" style="color:#fff; font-size:20px; font-weight:700; margin-bottom:4px; line-height:1.3;">Живое демо за 20 минут</h3>
+    <p id="pm-modal-sub" style="color:#a0b8d8; font-size:13px; margin-bottom:24px; line-height:1.6;">Покажем платформу на реальных примерах — без обязательств.</p>
+    <!-- Fields -->
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
+      <div>
+        <label id="pm-modal-lbl-name" for="pm-modal-name" style="display:block; color:#a0b8d8; font-size:11px; font-weight:600; margin-bottom:6px;">Ваше имя</label>
+        <input id="pm-modal-name" type="text" placeholder="Александр Петров" style="width:100%; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.15); border-radius:10px; padding:10px 14px; color:#e2e8f0; font-size:13px; outline:none; box-sizing:border-box;" />
+      </div>
+      <div>
+        <label id="pm-modal-lbl-phone" for="pm-modal-phone" style="display:block; color:#a0b8d8; font-size:11px; font-weight:600; margin-bottom:6px;">Телефон</label>
+        <input id="pm-modal-phone" type="tel" placeholder="+357 96 123 456" style="width:100%; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.15); border-radius:10px; padding:10px 14px; color:#e2e8f0; font-size:13px; outline:none; box-sizing:border-box;" />
+      </div>
+    </div>
+    <div style="margin-bottom:20px;">
+      <label id="pm-modal-lbl-company" for="pm-modal-company" style="display:block; color:#a0b8d8; font-size:11px; font-weight:600; margin-bottom:6px;">Компания</label>
+      <input id="pm-modal-company" type="text" placeholder="СК «Стройпром»" style="width:100%; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.15); border-radius:10px; padding:10px 14px; color:#e2e8f0; font-size:13px; outline:none; box-sizing:border-box;" />
+    </div>
+    <button id="pm-modal-btn" onclick="submitPMModal()" style="width:100%; background:#3182ce; border:none; border-radius:12px; padding:14px; color:#fff; font-size:14px; font-weight:700; cursor:pointer; transition:background 0.2s;">Записаться на демо</button>
+    <p id="pm-modal-consent" style="color:rgba(160,184,216,0.5); font-size:11px; text-align:center; margin-top:10px;">Нажимая кнопку, вы соглашаетесь на обработку персональных данных</p>
+    <!-- Direct links -->
+    <div style="border-top:1px solid rgba(255,255,255,0.08); margin-top:20px; padding-top:16px;">
+      <p id="pm-modal-or" style="color:rgba(160,184,216,0.6); font-size:12px; text-align:center; margin-bottom:12px;">или напишите напрямую</p>
+      <div style="display:flex; gap:10px;">
+        <a href="https://t.me/+35795951176" target="_blank" style="flex:1; display:flex; align-items:center; justify-content:center; gap:8px; padding:10px; border-radius:10px; background:rgba(41,182,246,0.12); color:#29b6f6; font-size:13px; font-weight:600; text-decoration:none;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+          Telegram
+        </a>
+        <a href="https://wa.me/35795951176" target="_blank" style="flex:1; display:flex; align-items:center; justify-content:center; gap:8px; padding:10px; border-radius:10px; background:rgba(37,211,102,0.12); color:#25d366; font-size:13px; font-weight:600; text-decoration:none;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M11.99 2C6.477 2 2 6.477 2 12c0 1.89.524 3.659 1.435 5.163L2 22l4.986-1.307A9.96 9.96 0 0 0 12 22c5.523 0 10-4.477 10-10S17.513 2 11.99 2z"/></svg>
+          WhatsApp
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function openPMModal(){
+    const m=document.getElementById('pmDemoModal');
+    m.style.display='flex';
+    document.body.style.overflow='hidden';
+    setTimeout(()=>document.getElementById('pm-modal-name').focus(),100);
+    /* sync lang strings */
+    const t=window._pmLangT||{};
+    if(t.bookDemo){
+      const el=document.getElementById('pm-modal-eyebrow');if(el)el.textContent=t.bookDemo;
+    }
+    if(t.formName){document.getElementById('pm-modal-lbl-name').textContent=t.formName;}
+    if(t.formPhone){document.getElementById('pm-modal-lbl-phone').textContent=t.formPhone;}
+    if(t.formCompany){document.getElementById('pm-modal-lbl-company').textContent=t.formCompany;}
+    if(t.formPhPh){document.getElementById('pm-modal-name').placeholder=t.formPhPh;}
+    if(t.formPhPhone){document.getElementById('pm-modal-phone').placeholder=t.formPhPhone;}
+    if(t.formPhComp){document.getElementById('pm-modal-company').placeholder=t.formPhComp;}
+    if(t.formBtn){const b=document.getElementById('pm-modal-btn');if(b&&!b.disabled)b.textContent=t.formBtn;}
+    if(t.formConsent){document.getElementById('pm-modal-consent').textContent=t.formConsent;}
+    if(t.formOr){document.getElementById('pm-modal-or').textContent=t.formOr;}
+  }
+  function closePMModal(){
+    document.getElementById('pmDemoModal').style.display='none';
+    document.body.style.overflow='';
+  }
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')closePMModal();});
+
+  async function submitPMModal(){
+    const t=window._pmLangT||{sending:'Отправляем...',sent:'✓ Заявка принята! Свяжемся в течение 2 часов',errSend:'Ошибка отправки — попробуйте ещё раз',formBtn:'Записаться на демо',alertName:'Пожалуйста, введите имя.',alertPhone:'Пожалуйста, введите телефон.'};
+    const name=document.getElementById('pm-modal-name').value.trim();
+    const phone=document.getElementById('pm-modal-phone').value.trim();
+    const company=document.getElementById('pm-modal-company').value.trim();
+    if(!name){document.getElementById('pm-modal-name').focus();alert(t.alertName);return;}
+    if(!phone){document.getElementById('pm-modal-phone').focus();alert(t.alertPhone);return;}
+    const btn=document.getElementById('pm-modal-btn');
+    btn.textContent=t.sending;btn.disabled=true;
+    const text='🏗 Новая заявка на демо — BuildOS PM\n\n👤 Имя: '+name+'\n📞 Контакт: '+phone+(company?'\n🏢 Компания: '+company:'')+'\n\n⏰ '+new Date().toLocaleString('ru-RU',{timeZone:'Europe/Moscow'});
+    try{
+      const res=await fetch('https://api.telegram.org/bot8728272597:AAFu2uQjVEVGrtbFMSpjI4r5OOpJwULncaQ/sendMessage',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:7398422197,text})});
+      if(!res.ok)throw new Error('HTTP '+res.status);
+      btn.textContent=t.sent;btn.style.background='#276749';
+      ['pm-modal-name','pm-modal-phone','pm-modal-company'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+      setTimeout(()=>closePMModal(),2500);
+    }catch(e){
+      btn.textContent=t.errSend;btn.style.background='#c53030';btn.disabled=false;
+      setTimeout(()=>{btn.textContent=t.formBtn||'Записаться на демо';btn.style.background='#3182ce';},3000);
+    }
+  }
+</script>
+
 <script>
   /* Smooth scroll for anchor links */
   document.querySelectorAll('a[href^="#"]').forEach(a => {
@@ -1368,16 +1463,10 @@ function applyPMLang(lang){
   if(heroP)heroP.textContent=t.heroSub;
 
   /* hero CTAs */
-  const ctaBtns=document.querySelectorAll('.hero-bg .flex.flex-col a');
-  ctaBtns.forEach(btn=>{
-    const svg=btn.querySelector('svg');
-    if(btn.href&&btn.href.includes('#contact')){btn.textContent=t.heroCta;if(svg)btn.prepend(svg);}
-    else if(btn.href&&btn.href.includes('#features')){
-      const arrow=btn.querySelector('svg:last-child');
-      btn.textContent=t.heroFeatures;
-      if(arrow)btn.appendChild(arrow);
-    }
-  });
+  const heroCtaBtn=document.querySelector('.hero-bg button.cta-btn');
+  if(heroCtaBtn){const svg=heroCtaBtn.querySelector('svg');heroCtaBtn.textContent=t.heroCta;if(svg)heroCtaBtn.prepend(svg);}
+  const heroFeatLink=document.querySelector('.hero-bg a[href="#features"]');
+  if(heroFeatLink){const arrow=heroFeatLink.querySelector('svg');heroFeatLink.textContent=t.heroFeatures;if(arrow)heroFeatLink.appendChild(arrow);}
 
   /* hero stats */
   const statCards=document.querySelectorAll('.hero-bg .stat-card');
@@ -1485,7 +1574,7 @@ function applyPMLang(lang){
         if(svg)li.prepend(svg);
       }
     });
-    const ctaBtn=pr.querySelector('a.cta-btn');if(ctaBtn)ctaBtn.textContent=t.prCta;
+    const ctaBtn=pr.querySelector('button.cta-btn');if(ctaBtn)ctaBtn.textContent=t.prCta;
     const note=pr.querySelector('p.text-center.text-xs');if(note)note.textContent=t.prNote;
   }
 
