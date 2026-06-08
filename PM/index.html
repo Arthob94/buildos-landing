@@ -799,8 +799,8 @@
     <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-4 max-w-4xl mx-auto">
 
       <!-- Monday.com -->
-      <div class="integ-card flex flex-col items-center gap-2.5 p-4 rounded-2xl bg-white border transition-all duration-200 hover:shadow-md cursor-default" style="border-color:#e2e8f0;">
-        <img src="monday.png" width="36" height="36" alt="Monday.com" class="transition-all duration-200" style="object-fit:contain;" />
+      <div class="integ-card flex flex-col items-center gap-2.5 p-4 rounded-2xl bg-white border transition-all duration-200 hover:shadow-md cursor-default" style="border-color:#e2e8f0;" data-brand-color="F62B54">
+        <img src="monday.png" width="36" height="36" alt="Monday.com" class="integ-logo-png transition-all duration-200" style="object-fit:contain; filter:grayscale(1) opacity(0.55);" />
         <span class="text-xs font-semibold" style="color:#64748b;">Monday</span>
       </div>
 
@@ -865,18 +865,21 @@
 
   <script>
     document.querySelectorAll('.integ-card').forEach(card => {
-      const img = card.querySelector('.integ-logo');
-      const svg = card.querySelector('.integ-logo-svg');
-      const color = img ? img.dataset.color : card.dataset.brandColor;
+      const img    = card.querySelector('.integ-logo');
+      const svg    = card.querySelector('.integ-logo-svg');
+      const png    = card.querySelector('.integ-logo-png');
+      const color  = img ? img.dataset.color : card.dataset.brandColor;
       if (!color) return;
       card.addEventListener('mouseenter', () => {
         if (img) img.src = img.src.replace(/\/[0-9a-fA-F]{6}$/, '/' + color);
         if (svg) svg.style.color = '#' + color;
+        if (png) png.style.filter = 'grayscale(0) opacity(1)';
         card.style.borderColor = '#' + color + '40';
       });
       card.addEventListener('mouseleave', () => {
         if (img) img.src = img.src.replace(/\/[0-9a-fA-F]{6}$/, '/94a3b8');
         if (svg) svg.style.color = '#94a3b8';
+        if (png) png.style.filter = 'grayscale(1) opacity(0.55)';
         card.style.borderColor = '#e2e8f0';
       });
     });
@@ -1084,9 +1087,10 @@
         />
       </div>
       <button
+        id="pm-submit-btn"
         class="cta-btn cursor-pointer w-full py-3.5 rounded-xl text-white font-heading font-700 text-sm"
         style="background:#3182ce; font-weight:700;"
-        onclick="this.textContent='Отправляем...'; setTimeout(()=>{this.textContent='✓ Заявка принята! Свяжемся в течение 2 часов'; this.style.background='#276749';}, 1500);"
+        onclick="submitPMLead()"
       >
         Записаться на демо
       </button>
@@ -1138,12 +1142,34 @@
     });
   });
 
-  /* Drop zone highlight */
-  document.querySelectorAll('.drop-zone').forEach(zone => {
-    zone.addEventListener('dragover', e => { e.preventDefault(); zone.style.borderColor = '#3182ce'; });
-    zone.addEventListener('dragleave', () => { zone.style.borderColor = ''; });
-    zone.addEventListener('drop', e => { e.preventDefault(); zone.style.borderColor = '#38a169'; });
-  });
+  /* Lead form → Telegram */
+  async function submitPMLead() {
+    const name    = document.getElementById('lead-name').value.trim();
+    const contact = document.getElementById('lead-phone').value.trim();
+    const company = document.getElementById('lead-company').value.trim();
+    if (!name)    { document.getElementById('lead-name').focus();  alert('Пожалуйста, введите имя.');     return; }
+    if (!contact) { document.getElementById('lead-phone').focus(); alert('Пожалуйста, введите телефон.'); return; }
+    const btn = document.getElementById('pm-submit-btn');
+    btn.textContent = 'Отправляем...';
+    btn.disabled = true;
+    const text = `🏗 Новая заявка на демо — BuildOS PM\n\n👤 Имя: ${name}\n📞 Контакт: ${contact}${company ? `\n🏢 Компания: ${company}` : ''}\n\n⏰ ${new Date().toLocaleString('ru-RU', {timeZone:'Europe/Moscow'})}`;
+    try {
+      const res = await fetch('https://api.telegram.org/bot8728272597:AAFu2uQjVEVGrtbFMSpjI4r5OOpJwULncaQ/sendMessage', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: 7398422197, text })
+      });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      btn.textContent = '✓ Заявка принята! Свяжемся в течение 2 часов';
+      btn.style.background = '#276749';
+      ['lead-name','lead-phone','lead-company'].forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; });
+    } catch(e) {
+      btn.textContent = 'Ошибка отправки — попробуйте ещё раз';
+      btn.style.background = '#c53030';
+      btn.disabled = false;
+      setTimeout(() => { btn.textContent = 'Записаться на демо'; btn.style.background = '#3182ce'; }, 3000);
+    }
+  }
 </script>
 
 </body>
